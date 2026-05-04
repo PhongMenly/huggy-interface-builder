@@ -97,6 +97,32 @@ function Index() {
     ? roadmaps.findIndex((r) => r.id === activeRoadmap)
     : -1;
 
+  const [expandedMissionId, setExpandedMissionId] = useState<string | null>(null);
+
+  const handleMissionCompleted = useCallback((missionId: string) => {
+    // Find the next mission to auto-expand
+    if (!currentRoadmap || currentRoadmapIndex < 0) return;
+    const mIndex = currentRoadmap.missions.findIndex((m) => m.id === missionId);
+    if (mIndex < 0) return;
+
+    // Next mission in same roadmap
+    if (mIndex + 1 < currentRoadmap.missions.length) {
+      const nextMission = currentRoadmap.missions[mIndex + 1];
+      setExpandedMissionId(nextMission.id);
+      // Scroll to next mission after collapse animation
+      setTimeout(() => {
+        document.getElementById(`mission-${nextMission.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 300);
+    } else if (currentRoadmapIndex + 1 < roadmaps.length) {
+      // Move to next roadmap
+      const nextRoadmap = roadmaps[currentRoadmapIndex + 1];
+      setActiveRoadmap(nextRoadmap.id);
+      if (nextRoadmap.missions.length > 0) {
+        setExpandedMissionId(nextRoadmap.missions[0].id);
+      }
+    }
+  }, [currentRoadmap, currentRoadmapIndex]);
+
   return (
     <div className="min-h-screen bg-background">
       <SaleMasterHero
@@ -132,6 +158,8 @@ function Index() {
                   isCompleted={allCompletedMissions.has(mission.id)}
                   checkedItems={checkedItemsForMission(mission.id)}
                   onToggleCheck={handleToggleCheck}
+                  onMissionCompleted={handleMissionCompleted}
+                  autoExpand={expandedMissionId === mission.id}
                 />
               ))}
             </div>

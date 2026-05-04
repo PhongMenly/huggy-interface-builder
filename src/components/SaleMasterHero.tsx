@@ -13,9 +13,9 @@ export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: Sa
         🏆 SALE MASTER AI
       </span>
       <h1 className="max-w-3xl text-3xl font-bold leading-tight text-foreground sm:text-4xl md:text-5xl">
-        Chào mừng VinSale đến với{" "}
+        Chào mừng Bạn đến với{" "}
         <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-          Sale Master AI
+          Master Sale AI
         </span>
       </h1>
       <p className="mt-4 max-w-xl text-base text-muted-foreground">

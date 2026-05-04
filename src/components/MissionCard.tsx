@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Mission } from "@/lib/missions-data";
 import { MissionContent } from "./MissionContent";
 import { ChecklistItem } from "./ChecklistItem";
@@ -9,6 +9,8 @@ interface MissionCardProps {
   isCompleted: boolean;
   checkedItems: Set<string>;
   onToggleCheck: (missionId: string, itemId: string, checked: boolean) => void;
+  onMissionCompleted?: (missionId: string) => void;
+  autoExpand?: boolean;
 }
 
 export function MissionCard({
@@ -17,10 +19,32 @@ export function MissionCard({
   isCompleted,
   checkedItems,
   onToggleCheck,
+  onMissionCompleted,
+  autoExpand,
 }: MissionCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const completedCount = mission.checklist.filter((c) => checkedItems.has(c.id)).length;
   const totalCount = mission.checklist.length;
+  const wasCompleted = useRef(isCompleted);
+
+  useEffect(() => {
+    if (autoExpand && !isLocked) {
+      setIsExpanded(true);
+    }
+  }, [autoExpand, isLocked]);
+
+  useEffect(() => {
+    if (!wasCompleted.current && isCompleted) {
+      // Auto-collapse after short delay and notify parent
+      const timer = setTimeout(() => {
+        setIsExpanded(false);
+        onMissionCompleted?.(mission.id);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+    wasCompleted.current = isCompleted;
+  }, [isCompleted, mission.id, onMissionCompleted]);
 
   if (isLocked) {
     return (
@@ -41,7 +65,7 @@ export function MissionCard({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card transition-all">
+    <div id={`mission-${mission.id}`} className="overflow-hidden rounded-xl border border-border bg-card transition-all">
       {/* Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
