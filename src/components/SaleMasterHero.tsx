@@ -9,7 +9,7 @@ interface SaleMasterHeroProps {
 }
 
 export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: SaleMasterHeroProps) {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [showVideo, setShowVideo] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -35,6 +35,7 @@ export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: Sa
             <Link to="/calendar" className="rounded-lg bg-purple-500/20 px-2.5 py-1 text-[11px] font-medium text-purple-300 transition hover:bg-purple-500/30 sm:px-3 sm:py-1.5 sm:text-xs">{isMobile ? "📅" : "📅 Lịch làm việc"}</Link>
             <Link to="/honor" className="rounded-lg bg-yellow-500/20 px-2.5 py-1 text-[11px] font-medium text-yellow-300 transition hover:bg-yellow-500/30 sm:px-3 sm:py-1.5 sm:text-xs">{isMobile ? "🏆" : "🏆 Vinh danh"}</Link>
             <Link to="/profile" className="rounded-lg bg-muted/30 px-2.5 py-1 text-[11px] font-medium text-foreground transition hover:bg-muted/50 sm:px-3 sm:py-1.5 sm:text-xs">{isMobile ? "👤" : "👤 Hồ sơ"}</Link>
+            <button onClick={signOut} className="rounded-lg bg-red-500/20 px-2.5 py-1 text-[11px] font-medium text-red-300 transition hover:bg-red-500/30 sm:px-3 sm:py-1.5 sm:text-xs">{isMobile ? "🚪" : "🚪 Đăng xuất"}</button>
           </>
         ) : (
           <Link to="/login" className="rounded-lg px-3 py-1.5 text-xs font-bold transition hover:scale-105 sm:px-4" style={{ backgroundColor: "#ffd700", color: "#121212" }}>Đăng nhập</Link>
@@ -66,15 +67,21 @@ export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: Sa
         🏆 SALE MASTER AI
       </span>
       <h1 className="max-w-3xl text-2xl font-bold leading-tight text-foreground sm:text-3xl md:text-5xl">
-        Chào mừng Bạn đến với{" "}
+        {user ? `Xin chào ${user.user_metadata?.full_name || user.user_metadata?.name || "Bạn"}! ` : "Chào mừng Bạn đến với "}
         <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
           Master Sale AI
         </span>
       </h1>
-      <p className="mt-4 max-w-xl text-base text-muted-foreground">
-        Hoàn thành từng lộ trình để trở thành Sale chuyên nghiệp của KOL AI System.
-        Mỗi nhiệm vụ giúp bạn nắm vững kỹ năng và kiến thức cần thiết.
-      </p>
+      {user ? (
+        <p className="mt-4 max-w-xl text-base text-muted-foreground">
+          Chào mừng bạn trở lại! Tiếp tục hoàn thành các nhiệm vụ để trở thành Sale chuyên nghiệp.
+        </p>
+      ) : (
+        <p className="mt-4 max-w-xl text-base text-muted-foreground">
+          Hoàn thành từng lộ trình để trở thành Sale chuyên nghiệp của KOL AI System.
+          Mỗi nhiệm vụ giúp bạn nắm vững kỹ năng và kiến thức cần thiết.
+        </p>
+      )}
       <button
         onClick={onStart}
         className="mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-base font-bold transition-all hover:scale-105 sm:mt-8 sm:px-8 sm:py-4 sm:text-lg"
@@ -82,9 +89,19 @@ export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: Sa
       >
         🚀 BẮT ĐẦU HÀNH TRÌNH
       </button>
-      <p className="mt-4 text-sm text-muted-foreground">
-        Tiến trình: {completedRoadmaps}/{totalRoadmaps} lộ trình hoàn thành
-      </p>
+      {user && (
+        <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+          <span className="inline-block h-2 w-2 rounded-full bg-green-400" />
+          <span>Đang đăng nhập: {user.email}</span>
+          <span className="mx-1">•</span>
+          <span>Tiến trình: {completedRoadmaps}/{totalRoadmaps} lộ trình</span>
+        </div>
+      )}
+      {!user && (
+        <p className="mt-4 text-sm text-muted-foreground">
+          Tiến trình: {completedRoadmaps}/{totalRoadmaps} lộ trình hoàn thành
+        </p>
+      )}
     </section>
   );
 }
