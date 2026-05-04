@@ -138,7 +138,7 @@ function Index() {
         onSelectRoadmap={setActiveRoadmap}
       />
 
-      <div ref={contentRef} className="mx-auto max-w-3xl px-4 pb-20 pt-4">
+      <div ref={contentRef} className="mx-auto max-w-3xl px-3 pb-20 pt-4 sm:px-4">
         {currentRoadmap ? (
           <>
             <div className="mb-6 text-center">

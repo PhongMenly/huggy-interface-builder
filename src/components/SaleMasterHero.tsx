@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -9,33 +9,41 @@ interface SaleMasterHeroProps {
 }
 
 export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: SaleMasterHeroProps) {
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const [showVideo, setShowVideo] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
-    <section className="relative flex flex-col items-center justify-center px-4 py-16 text-center">
+    <section className="relative flex flex-col items-center justify-center px-4 py-10 text-center sm:py-16">
       {/* Background image */}
       <div
-        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-20"
+        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-15 blur-sm"
         style={{ backgroundImage: "url('/images/hero-bg.png')" }}
       />
 
       {/* Top nav */}
-      <div className="absolute right-4 top-4 z-10 flex items-center gap-3">
+      <div className="absolute right-3 top-3 z-10 flex flex-wrap items-center justify-end gap-2 sm:right-4 sm:top-4 sm:gap-3">
         {user ? (
           <>
-            <Link to="/calendar" className="rounded-lg bg-purple-500/20 px-3 py-1.5 text-xs font-medium text-purple-300 transition hover:bg-purple-500/30">📅 Lịch làm việc</Link>
-            <Link to="/honor" className="rounded-lg bg-yellow-500/20 px-3 py-1.5 text-xs font-medium text-yellow-300 transition hover:bg-yellow-500/30">🏆 Vinh danh</Link>
-            <Link to="/profile" className="rounded-lg bg-muted/30 px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-muted/50">👤 Hồ sơ</Link>
+            <Link to="/calendar" className="rounded-lg bg-purple-500/20 px-2.5 py-1 text-[11px] font-medium text-purple-300 transition hover:bg-purple-500/30 sm:px-3 sm:py-1.5 sm:text-xs">{isMobile ? "📅" : "📅 Lịch làm việc"}</Link>
+            <Link to="/honor" className="rounded-lg bg-yellow-500/20 px-2.5 py-1 text-[11px] font-medium text-yellow-300 transition hover:bg-yellow-500/30 sm:px-3 sm:py-1.5 sm:text-xs">{isMobile ? "🏆" : "🏆 Vinh danh"}</Link>
+            <Link to="/profile" className="rounded-lg bg-muted/30 px-2.5 py-1 text-[11px] font-medium text-foreground transition hover:bg-muted/50 sm:px-3 sm:py-1.5 sm:text-xs">{isMobile ? "👤" : "👤 Hồ sơ"}</Link>
           </>
         ) : (
-          <Link to="/login" className="rounded-lg px-4 py-1.5 text-xs font-bold transition hover:scale-105" style={{ backgroundColor: "#ffd700", color: "#121212" }}>Đăng nhập</Link>
+          <Link to="/login" className="rounded-lg px-3 py-1.5 text-xs font-bold transition hover:scale-105 sm:px-4" style={{ backgroundColor: "#ffd700", color: "#121212" }}>Đăng nhập</Link>
         )}
       </div>
 
       {/* YouTube video */}
       {showVideo && (
-        <div className="relative z-10 mb-8 w-full max-w-2xl overflow-hidden rounded-2xl border border-border shadow-2xl">
+        <div className="relative z-10 mb-6 mt-10 w-full max-w-2xl overflow-hidden rounded-xl border border-border shadow-2xl sm:mb-8 sm:mt-0 sm:rounded-2xl">
           <div className="relative pb-[56.25%]">
             <iframe
               className="absolute inset-0 h-full w-full"
@@ -57,7 +65,7 @@ export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: Sa
       <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-300">
         🏆 SALE MASTER AI
       </span>
-      <h1 className="max-w-3xl text-3xl font-bold leading-tight text-foreground sm:text-4xl md:text-5xl">
+      <h1 className="max-w-3xl text-2xl font-bold leading-tight text-foreground sm:text-3xl md:text-5xl">
         Chào mừng Bạn đến với{" "}
         <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
           Master Sale AI
@@ -69,7 +77,7 @@ export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: Sa
       </p>
       <button
         onClick={onStart}
-        className="mt-8 inline-flex items-center gap-2 rounded-xl px-8 py-4 text-lg font-bold transition-all hover:scale-105"
+        className="mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-base font-bold transition-all hover:scale-105 sm:mt-8 sm:px-8 sm:py-4 sm:text-lg"
         style={{ backgroundColor: "#ffd700", color: "#121212" }}
       >
         🚀 BẮT ĐẦU HÀNH TRÌNH

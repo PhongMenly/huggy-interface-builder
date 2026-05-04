@@ -66,13 +66,19 @@ function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen" style={{ backgroundColor: "#121212" }}>
-      {/* Left - Image */}
+    <div className="relative flex min-h-screen" style={{ backgroundColor: "#121212" }}>
+      {/* Mobile background image */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-20 blur-sm lg:hidden"
+        style={{ backgroundImage: "url('/images/hero-bg.png')" }}
+      />
+
+      {/* Left - Image (desktop only) */}
       <div
         className="hidden w-1/2 bg-cover bg-center lg:block"
         style={{ backgroundImage: "url('/images/hero-bg.png')" }}
       >
-        <div className="flex h-full flex-col items-center justify-center bg-black/30 p-8">
+        <div className="flex h-full flex-col items-center justify-center bg-black/40 p-8">
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-yellow-500/40 bg-yellow-500/10 px-5 py-2 text-sm font-bold text-yellow-300">
             🏆 MASTER SALE AI
           </span>
@@ -87,13 +93,20 @@ function LoginPage() {
       </div>
 
       {/* Right - Form */}
-      <div className="flex w-full items-center justify-center px-6 lg:w-1/2">
-        <div className="w-full max-w-md">
-          <div className="mb-8 text-center">
-            <h1 className="text-2xl font-bold text-white">
+      <div className="relative z-10 flex w-full items-center justify-center px-4 py-8 sm:px-6 lg:w-1/2">
+        <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#121212]/80 p-6 backdrop-blur-md sm:p-8 lg:border-transparent lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+          {/* Mobile branding */}
+          <div className="mb-6 text-center lg:hidden">
+            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-yellow-500/40 bg-yellow-500/10 px-4 py-1.5 text-xs font-bold text-yellow-300">
+              🏆 MASTER SALE AI
+            </span>
+          </div>
+
+          <div className="mb-6 text-center sm:mb-8">
+            <h1 className="text-xl font-bold text-white sm:text-2xl">
               {isLogin ? "Đăng nhập" : "Đăng ký tài khoản"}
             </h1>
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="mt-1.5 text-xs text-gray-400 sm:mt-2 sm:text-sm">
               {isLogin ? "Chào mừng bạn trở lại!" : "Tạo tài khoản để bắt đầu"}
             </p>
           </div>
