@@ -55,8 +55,8 @@ function HonorPage() {
       .eq("user_id", user.id)
       .then(({ data }) => {
         if (data) {
-          setTotalOrders(data.reduce((a, r) => a + r.orders_count, 0));
-          setTotalRevenue(data.reduce((a, r) => a + Number(r.revenue), 0));
+          setTotalOrders(data.reduce((a, r) => a + (r.orders_count ?? 0), 0));
+          setTotalRevenue(data.reduce((a, r) => a + Number(r.revenue ?? 0), 0));
         }
       });
   }, [user]);
