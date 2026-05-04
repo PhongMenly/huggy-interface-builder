@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { roadmaps } from "@/lib/missions-data";
 import { SaleMasterHero } from "@/components/SaleMasterHero";
 import { ProgressTracker } from "@/components/ProgressTracker";
