@@ -10,6 +10,7 @@ interface MissionCardProps {
   checkedItems: Set<string>;
   onToggleCheck: (missionId: string, itemId: string, checked: boolean) => void;
   onMissionCompleted?: (missionId: string) => void;
+  autoExpand?: boolean;
 }
 
 export function MissionCard({
@@ -19,12 +20,19 @@ export function MissionCard({
   checkedItems,
   onToggleCheck,
   onMissionCompleted,
+  autoExpand,
 }: MissionCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const completedCount = mission.checklist.filter((c) => checkedItems.has(c.id)).length;
   const totalCount = mission.checklist.length;
   const wasCompleted = useRef(isCompleted);
+
+  useEffect(() => {
+    if (autoExpand && !isLocked) {
+      setIsExpanded(true);
+    }
+  }, [autoExpand, isLocked]);
 
   useEffect(() => {
     if (!wasCompleted.current && isCompleted) {
@@ -57,7 +65,7 @@ export function MissionCard({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card transition-all">
+    <div id={`mission-${mission.id}`} className="overflow-hidden rounded-xl border border-border bg-card transition-all">
       {/* Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
