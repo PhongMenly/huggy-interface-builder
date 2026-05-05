@@ -47,6 +47,7 @@ function CalendarPage() {
   const [form, setForm] = useState({ orders_count: 0, revenue: 0, notes: "", mood: 0, priority_tasks: ["", "", "", "", ""] as string[], daily_todos: [] as { text: string; done: boolean }[] });
   const [newTodo, setNewTodo] = useState("");
   const [saving, setSaving] = useState(false);
+  const [localTodos, setLocalTodos] = useState<{ text: string; done: boolean }[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [existingTotals, setExistingTotals] = useState<{ orders_count: number; revenue: number } | null>(null);
 
@@ -130,30 +131,18 @@ function CalendarPage() {
     setSaving(false);
   };
 
-  const handleSavePriorityTasks = async () => {
+  // Load local todos from localStorage (completely separate from reports)
+  useEffect(() => {
     if (!user) return;
-    setSaving(true);
-    const existing = reports.find((r) => r.report_date === selectedDate);
-    if (existing) {
-      await supabase.from("daily_reports").update({ priority_tasks: form.priority_tasks.filter(Boolean), updated_at: new Date().toISOString() }).eq("id", existing.id);
-    } else {
-      await supabase.from("daily_reports").insert({ user_id: user.id, report_date: selectedDate, priority_tasks: form.priority_tasks.filter(Boolean) });
+    const stored = localStorage.getItem(`todos_${user.id}`);
+    if (stored) {
+      try { setLocalTodos(JSON.parse(stored)); } catch {}
     }
-    await fetchReports();
-    setSaving(false);
-  };
+  }, [user]);
 
-  const handleSaveDailyTodos = async () => {
-    if (!user) return;
-    setSaving(true);
-    const existing = reports.find((r) => r.report_date === selectedDate);
-    if (existing) {
-      await supabase.from("daily_reports").update({ daily_todos: form.daily_todos, updated_at: new Date().toISOString() }).eq("id", existing.id);
-    } else {
-      await supabase.from("daily_reports").insert({ user_id: user.id, report_date: selectedDate, daily_todos: form.daily_todos });
-    }
-    await fetchReports();
-    setSaving(false);
+  const saveLocalTodos = (todos: { text: string; done: boolean }[]) => {
+    setLocalTodos(todos);
+    if (user) localStorage.setItem(`todos_${user.id}`, JSON.stringify(todos));
   };
 
   // Monthly summary
@@ -208,51 +197,25 @@ function CalendarPage() {
           </div>
         )}
 
-        {/* Priority tasks - independent section */}
-        <div className="mb-6 rounded-xl border border-border bg-card p-4">
-          <h2 className="mb-3 text-sm font-bold text-foreground">5 viec uu tien hom nay</h2>
-          <div className="space-y-1.5">
-            {form.priority_tasks.map((task, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <span className="w-5 text-center text-xs font-bold text-purple-400">{i + 1}</span>
-                <input
-                  type="text"
-                  placeholder={`Viec uu tien ${i + 1}`}
-                  value={task}
-                  onChange={(e) => {
-                    const updated = [...form.priority_tasks];
-                    updated[i] = e.target.value;
-                    setForm({ ...form, priority_tasks: updated });
-                  }}
-                  className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
-                />
-              </div>
-            ))}
-          </div>
-          <button onClick={handleSavePriorityTasks} disabled={saving || (isAdmin && !!selectedUserId)} className="mt-3 w-full rounded-xl py-2 text-xs font-bold transition hover:scale-[1.02] disabled:opacity-50 border border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
-            Luu viec uu tien
-          </button>
-        </div>
-
-        {/* Daily todos - independent section */}
+        {/* Daily todos - local only, not saved to report history */}
         <div className="mb-6 rounded-xl border border-border bg-card p-4">
           <h2 className="mb-3 text-sm font-bold text-foreground">Danh sach viec can lam</h2>
           <div className="space-y-1.5">
-            {form.daily_todos.map((todo, i) => (
+            {localTodos.map((todo, i) => (
               <div key={i} className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => {
-                    const updated = [...form.daily_todos];
+                    const updated = [...localTodos];
                     updated[i] = { ...updated[i], done: !updated[i].done };
-                    setForm({ ...form, daily_todos: updated });
+                    saveLocalTodos(updated);
                   }}
                   className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border text-xs ${todo.done ? "border-green-500 bg-green-500/20 text-green-400" : "border-border text-transparent"}`}
                 >
                   x
                 </button>
                 <span className={`flex-1 text-sm ${todo.done ? "text-muted-foreground line-through" : "text-foreground"}`}>{todo.text}</span>
-                <button type="button" onClick={() => setForm({ ...form, daily_todos: form.daily_todos.filter((_, j) => j !== i) })} className="text-xs text-red-400 hover:text-red-300">X</button>
+                <button type="button" onClick={() => saveLocalTodos(localTodos.filter((_, j) => j !== i))} className="text-xs text-red-400 hover:text-red-300">X</button>
               </div>
             ))}
             <div className="flex gap-2">
@@ -264,18 +227,15 @@ function CalendarPage() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && newTodo.trim()) {
                     e.preventDefault();
-                    setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] });
+                    saveLocalTodos([...localTodos, { text: newTodo.trim(), done: false }]);
                     setNewTodo("");
                   }
                 }}
                 className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
               />
-              <button type="button" onClick={() => { if (newTodo.trim()) { setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] }); setNewTodo(""); } }} className="rounded-lg border border-purple-500/50 px-3 text-xs font-medium text-purple-400 hover:bg-purple-500/10">+</button>
+              <button type="button" onClick={() => { if (newTodo.trim()) { saveLocalTodos([...localTodos, { text: newTodo.trim(), done: false }]); setNewTodo(""); } }} className="rounded-lg border border-purple-500/50 px-3 text-xs font-medium text-purple-400 hover:bg-purple-500/10">+</button>
             </div>
           </div>
-          <button onClick={handleSaveDailyTodos} disabled={saving || (isAdmin && !!selectedUserId)} className="mt-3 w-full rounded-xl py-2 text-xs font-bold transition hover:scale-[1.02] disabled:opacity-50 border border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
-            Luu danh sach
-          </button>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
