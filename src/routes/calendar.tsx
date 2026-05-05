@@ -114,8 +114,6 @@ function CalendarPage() {
         revenue: newRevenue,
         notes: form.notes,
         mood: form.mood || null,
-        priority_tasks: form.priority_tasks.filter(Boolean),
-        daily_todos: form.daily_todos,
         updated_at: new Date().toISOString(),
       }).eq("id", editingId);
     } else {
@@ -126,9 +124,33 @@ function CalendarPage() {
         revenue: form.revenue,
         notes: form.notes,
         mood: form.mood || null,
-        priority_tasks: form.priority_tasks.filter(Boolean),
-        daily_todos: form.daily_todos,
       });
+    }
+    await fetchReports();
+    setSaving(false);
+  };
+
+  const handleSavePriorityTasks = async () => {
+    if (!user) return;
+    setSaving(true);
+    const existing = reports.find((r) => r.report_date === selectedDate);
+    if (existing) {
+      await supabase.from("daily_reports").update({ priority_tasks: form.priority_tasks.filter(Boolean), updated_at: new Date().toISOString() }).eq("id", existing.id);
+    } else {
+      await supabase.from("daily_reports").insert({ user_id: user.id, report_date: selectedDate, priority_tasks: form.priority_tasks.filter(Boolean) });
+    }
+    await fetchReports();
+    setSaving(false);
+  };
+
+  const handleSaveDailyTodos = async () => {
+    if (!user) return;
+    setSaving(true);
+    const existing = reports.find((r) => r.report_date === selectedDate);
+    if (existing) {
+      await supabase.from("daily_reports").update({ daily_todos: form.daily_todos, updated_at: new Date().toISOString() }).eq("id", existing.id);
+    } else {
+      await supabase.from("daily_reports").insert({ user_id: user.id, report_date: selectedDate, daily_todos: form.daily_todos });
     }
     await fetchReports();
     setSaving(false);
@@ -185,6 +207,76 @@ function CalendarPage() {
             </div>
           </div>
         )}
+
+        {/* Priority tasks - independent section */}
+        <div className="mb-6 rounded-xl border border-border bg-card p-4">
+          <h2 className="mb-3 text-sm font-bold text-foreground">5 viec uu tien hom nay</h2>
+          <div className="space-y-1.5">
+            {form.priority_tasks.map((task, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <span className="w-5 text-center text-xs font-bold text-purple-400">{i + 1}</span>
+                <input
+                  type="text"
+                  placeholder={`Viec uu tien ${i + 1}`}
+                  value={task}
+                  onChange={(e) => {
+                    const updated = [...form.priority_tasks];
+                    updated[i] = e.target.value;
+                    setForm({ ...form, priority_tasks: updated });
+                  }}
+                  className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
+                />
+              </div>
+            ))}
+          </div>
+          <button onClick={handleSavePriorityTasks} disabled={saving || (isAdmin && !!selectedUserId)} className="mt-3 w-full rounded-xl py-2 text-xs font-bold transition hover:scale-[1.02] disabled:opacity-50 border border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
+            Luu viec uu tien
+          </button>
+        </div>
+
+        {/* Daily todos - independent section */}
+        <div className="mb-6 rounded-xl border border-border bg-card p-4">
+          <h2 className="mb-3 text-sm font-bold text-foreground">Danh sach viec can lam</h2>
+          <div className="space-y-1.5">
+            {form.daily_todos.map((todo, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = [...form.daily_todos];
+                    updated[i] = { ...updated[i], done: !updated[i].done };
+                    setForm({ ...form, daily_todos: updated });
+                  }}
+                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border text-xs ${todo.done ? "border-green-500 bg-green-500/20 text-green-400" : "border-border text-transparent"}`}
+                >
+                  x
+                </button>
+                <span className={`flex-1 text-sm ${todo.done ? "text-muted-foreground line-through" : "text-foreground"}`}>{todo.text}</span>
+                <button type="button" onClick={() => setForm({ ...form, daily_todos: form.daily_todos.filter((_, j) => j !== i) })} className="text-xs text-red-400 hover:text-red-300">X</button>
+              </div>
+            ))}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Them viec can lam..."
+                value={newTodo}
+                onChange={(e) => setNewTodo(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && newTodo.trim()) {
+                    e.preventDefault();
+                    setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] });
+                    setNewTodo("");
+                  }
+                }}
+                className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
+              />
+              <button type="button" onClick={() => { if (newTodo.trim()) { setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] }); setNewTodo(""); } }} className="rounded-lg border border-purple-500/50 px-3 text-xs font-medium text-purple-400 hover:bg-purple-500/10">+</button>
+            </div>
+          </div>
+          <button onClick={handleSaveDailyTodos} disabled={saving || (isAdmin && !!selectedUserId)} className="mt-3 w-full rounded-xl py-2 text-xs font-bold transition hover:scale-[1.02] disabled:opacity-50 border border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
+            Luu danh sach
+          </button>
+        </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Calendar */}
@@ -271,74 +363,7 @@ function CalendarPage() {
           </div>
         </div>
 
-        {/* Priority tasks - separate section */}
-        <div className="mt-6 rounded-xl border border-border bg-card p-4">
-          <h2 className="mb-3 text-sm font-bold text-foreground">5 viec uu tien hom nay</h2>
-          <div className="space-y-1.5">
-            {form.priority_tasks.map((task, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <span className="w-5 text-center text-xs font-bold text-purple-400">{i + 1}</span>
-                <input
-                  type="text"
-                  placeholder={`Viec uu tien ${i + 1}`}
-                  value={task}
-                  onChange={(e) => {
-                    const updated = [...form.priority_tasks];
-                    updated[i] = e.target.value;
-                    setForm({ ...form, priority_tasks: updated });
-                  }}
-                  className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
-                />
-              </div>
-            ))}
-          </div>
-          <button onClick={handleSave} disabled={saving || (isAdmin && !!selectedUserId)} className="mt-3 w-full rounded-xl py-2 text-xs font-bold transition hover:scale-[1.02] disabled:opacity-50 border border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
-            Luu viec uu tien
-          </button>
-        </div>
-
-        {/* Daily todos - separate section */}
-        <div className="mt-6 rounded-xl border border-border bg-card p-4">
-          <h2 className="mb-3 text-sm font-bold text-foreground">Danh sach viec can lam</h2>
-          <div className="space-y-1.5">
-            {form.daily_todos.map((todo, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    const updated = [...form.daily_todos];
-                    updated[i] = { ...updated[i], done: !updated[i].done };
-                    setForm({ ...form, daily_todos: updated });
-                  }}
-                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border text-xs ${todo.done ? "border-green-500 bg-green-500/20 text-green-400" : "border-border text-transparent"}`}
-                >
-                  x
-                </button>
-                <span className={`flex-1 text-sm ${todo.done ? "text-muted-foreground line-through" : "text-foreground"}`}>{todo.text}</span>
-                <button type="button" onClick={() => setForm({ ...form, daily_todos: form.daily_todos.filter((_, j) => j !== i) })} className="text-xs text-red-400 hover:text-red-300">X</button>
-              </div>
-            ))}
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Them viec can lam..."
-                value={newTodo}
-                onChange={(e) => setNewTodo(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && newTodo.trim()) {
-                    e.preventDefault();
-                    setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] });
-                    setNewTodo("");
-                  }
-                }}
-                className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
-              />
-              <button type="button" onClick={() => { if (newTodo.trim()) { setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] }); setNewTodo(""); } }} className="rounded-lg border border-purple-500/50 px-3 text-xs font-medium text-purple-400 hover:bg-purple-500/10">+</button>
-            </div>
-          </div>
-        </div>
-
-        {/* Monthly summary */}
+        {/* Monthly summary & order history */}
         <div className="mt-8 rounded-xl border border-border bg-card p-5">
           <h2 className="mb-4 text-sm font-bold text-foreground">Tong hop thang</h2>
           <div className="grid grid-cols-3 gap-4 text-center">
@@ -403,8 +428,8 @@ function CalendarPage() {
           </div>
         </div>
 
-        {/* Recent reports list */}
-        <div className="mt-8">
+        {/* Report history - below monthly summary */}
+        <div className="mt-6">
           <h2 className="mb-4 text-sm font-bold text-foreground">Lich su bao cao gan day</h2>
           <div className="space-y-2">
             {reports.slice(0, 10).map((r) => (
@@ -414,9 +439,6 @@ function CalendarPage() {
                   <p className="text-xs text-muted-foreground">
                     {r.mood ? MOODS.find(m => m.value === r.mood)?.label + " · " : ""}{r.notes || "Không có ghi chú"}
                   </p>
-                  {r.priority_tasks?.length > 0 && (
-                    <p className="mt-0.5 text-[10px] text-purple-400">{r.priority_tasks.length} việc ưu tiên</p>
-                  )}
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-purple-400">{r.orders_count} đơn</p>
