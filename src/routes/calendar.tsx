@@ -48,6 +48,7 @@ function CalendarPage() {
   const [newTodo, setNewTodo] = useState("");
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [existingTotals, setExistingTotals] = useState<{ orders_count: number; revenue: number } | null>(null);
 
   // Admin check
   const isAdmin = user?.email === "phuowngvimmo25@gmail.com";
@@ -92,10 +93,12 @@ function CalendarPage() {
   useEffect(() => {
     const existing = reports.find((r) => r.report_date === selectedDate);
     if (existing) {
-      setForm({ orders_count: existing.orders_count, revenue: existing.revenue, notes: existing.notes || "", mood: existing.mood || 0, priority_tasks: existing.priority_tasks?.length ? [...existing.priority_tasks, ...Array(5 - existing.priority_tasks.length).fill("")].slice(0, 5) : ["", "", "", "", ""], daily_todos: existing.daily_todos || [] });
+      setExistingTotals({ orders_count: existing.orders_count, revenue: existing.revenue });
+      setForm({ orders_count: 0, revenue: 0, notes: existing.notes || "", mood: existing.mood || 0, priority_tasks: existing.priority_tasks?.length ? [...existing.priority_tasks, ...Array(5 - existing.priority_tasks.length).fill("")].slice(0, 5) : ["", "", "", "", ""], daily_todos: existing.daily_todos || [] });
       setEditingId(existing.id);
     } else {
       setForm({ orders_count: 0, revenue: 0, notes: "", mood: 0, priority_tasks: ["", "", "", "", ""], daily_todos: [] });
+      setExistingTotals(null);
       setEditingId(null);
     }
   }, [selectedDate, reports]);
@@ -103,18 +106,29 @@ function CalendarPage() {
   const handleSave = async () => {
     if (!user) return;
     setSaving(true);
-    const saveData = {
-      orders_count: form.orders_count,
-      revenue: form.revenue,
-      notes: form.notes,
-      mood: form.mood || null,
-      priority_tasks: form.priority_tasks.filter(Boolean),
-      daily_todos: form.daily_todos,
-    };
     if (editingId) {
-      await supabase.from("daily_reports").update({ ...saveData, updated_at: new Date().toISOString() }).eq("id", editingId);
+      const newOrders = (existingTotals?.orders_count || 0) + form.orders_count;
+      const newRevenue = (existingTotals?.revenue || 0) + form.revenue;
+      await supabase.from("daily_reports").update({
+        orders_count: newOrders,
+        revenue: newRevenue,
+        notes: form.notes,
+        mood: form.mood || null,
+        priority_tasks: form.priority_tasks.filter(Boolean),
+        daily_todos: form.daily_todos,
+        updated_at: new Date().toISOString(),
+      }).eq("id", editingId);
     } else {
-      await supabase.from("daily_reports").insert({ user_id: user.id, report_date: selectedDate, ...saveData });
+      await supabase.from("daily_reports").insert({
+        user_id: user.id,
+        report_date: selectedDate,
+        orders_count: form.orders_count,
+        revenue: form.revenue,
+        notes: form.notes,
+        mood: form.mood || null,
+        priority_tasks: form.priority_tasks.filter(Boolean),
+        daily_todos: form.daily_todos,
+      });
     }
     await fetchReports();
     setSaving(false);
@@ -207,13 +221,24 @@ function CalendarPage() {
             <h2 className="mb-3 text-sm font-bold text-foreground">
               Bao cao ngay {selectedDate}
             </h2>
+            {/* Show existing totals if report exists */}
+            {existingTotals && (
+              <div className="mb-3 rounded-lg border border-green-500/30 bg-green-500/5 p-3">
+                <p className="text-xs font-medium text-green-400 mb-1">Tong hien tai trong ngay</p>
+                <div className="flex gap-4 text-sm">
+                  <span className="text-foreground">Don: <strong className="text-green-400">{existingTotals.orders_count}</strong></span>
+                  <span className="text-foreground">Doanh thu: <strong className="text-yellow-400">{existingTotals.revenue.toLocaleString()} VND</strong></span>
+                </div>
+                <p className="mt-1 text-[10px] text-muted-foreground">Nhap them so moi de cong don vao tong</p>
+              </div>
+            )}
             <div className="space-y-3">
               <div>
-                <label className="mb-1 block text-xs text-muted-foreground">Số đơn hàng</label>
+                <label className="mb-1 block text-xs text-muted-foreground">{editingId ? "Them so don hang" : "So don hang"}</label>
                 <input type="text" inputMode="numeric" value={form.orders_count || ""} onChange={(e) => setForm({ ...form, orders_count: Number(e.target.value.replace(/\D/g, "")) || 0 })} placeholder="Nhap so don hang" className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-muted-foreground">Doanh thu (VNĐ)</label>
+                <label className="mb-1 block text-xs text-muted-foreground">{editingId ? "Them doanh thu (VND)" : "Doanh thu (VND)"}</label>
                 <input type="text" inputMode="numeric" value={form.revenue || ""} onChange={(e) => setForm({ ...form, revenue: Number(e.target.value.replace(/\D/g, "")) || 0 })} placeholder="Nhap doanh thu" className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
               </div>
 
@@ -240,7 +265,7 @@ function CalendarPage() {
                 <textarea rows={3} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
               </div>
               <button onClick={handleSave} disabled={saving || (isAdmin && !!selectedUserId)} className="w-full rounded-xl py-2.5 text-sm font-bold transition hover:scale-[1.02] disabled:opacity-50" style={{ backgroundColor: "#ffd700", color: "#121212" }}>
-                {saving ? "Đang lưu..." : editingId ? "Cập nhật báo cáo" : "Gửi báo cáo"}
+                {saving ? "Dang luu..." : editingId ? "Cong don & Cap nhat" : "Gui bao cao"}
               </button>
             </div>
           </div>
