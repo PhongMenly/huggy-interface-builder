@@ -292,6 +292,56 @@ function CalendarPage() {
               <div>
                 <label className="mb-1 block text-xs text-muted-foreground">{editingId ? "Them doanh thu (VND)" : "Doanh thu (VND)"}</label>
                 <input type="text" inputMode="numeric" value={form.revenue || ""} onChange={(e) => setForm({ ...form, revenue: Number(e.target.value.replace(/\D/g, "")) || 0 })} placeholder="Nhap doanh thu" className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
+                {/* Quick denomination buttons */}
+                <div className="mt-1.5 flex flex-wrap gap-1.5">
+                  {["0", "00", "000", "0000", "00000", "000000"].map((zeros) => (
+                    <button
+                      key={zeros}
+                      type="button"
+                      onClick={() => {
+                        const current = String(form.revenue || "");
+                        const newVal = Number(current + zeros) || 0;
+                        setForm({ ...form, revenue: newVal });
+                      }}
+                      className="rounded-md border border-border px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition hover:border-yellow-500/50 hover:bg-yellow-500/10 hover:text-yellow-400"
+                    >
+                      +{zeros}
+                    </button>
+                  ))}
+                </div>
+                {/* Suggested amounts */}
+                {form.revenue > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <span className="text-[10px] text-muted-foreground self-center mr-1">Gợi ý:</span>
+                    {(() => {
+                      const v = form.revenue;
+                      const suggestions: number[] = [];
+                      // Round to nearest meaningful amounts like bank transfers
+                      const magnitudes = [1000, 10000, 100000, 1000000];
+                      for (const mag of magnitudes) {
+                        const rounded = Math.round(v / mag) * mag;
+                        const lower = Math.floor(v / mag) * mag;
+                        const upper = Math.ceil(v / mag) * mag;
+                        for (const s of [lower, rounded, upper]) {
+                          if (s > 0 && s !== v && !suggestions.includes(s)) suggestions.push(s);
+                        }
+                      }
+                      suggestions.sort((a, b) => a - b);
+                      // Pick 3 closest distinct suggestions
+                      const unique = suggestions.filter((s, i, arr) => arr.indexOf(s) === i).slice(0, 3);
+                      return unique.map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => setForm({ ...form, revenue: s })}
+                          className="rounded-md border border-yellow-500/30 bg-yellow-500/5 px-2.5 py-1 text-[11px] font-medium text-yellow-400 transition hover:bg-yellow-500/15"
+                        >
+                          {s.toLocaleString()}
+                        </button>
+                      ));
+                    })()}
+                  </div>
+                )}
               </div>
 
               {/* Mood */}
