@@ -1,5 +1,6 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { AuthProvider } from "@/hooks/useAuth";
+import { AppSidebar } from "@/components/AppSidebar";
 
 import appCss from "../styles.css?url";
 
@@ -70,9 +71,21 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const currentPath = useRouterState({ select: (s) => s.location.pathname });
+  const isLoginPage = currentPath === "/login";
+
   return (
     <AuthProvider>
-      <Outlet />
+      {isLoginPage ? (
+        <Outlet />
+      ) : (
+        <div className="flex min-h-screen w-full">
+          <AppSidebar />
+          <div className="flex-1 overflow-auto">
+            <Outlet />
+          </div>
+        </div>
+      )}
     </AuthProvider>
   );
 }
