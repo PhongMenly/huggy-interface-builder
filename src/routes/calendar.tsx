@@ -153,7 +153,7 @@ function CalendarPage() {
       <AppSidebar />
       <div className="flex-1 overflow-auto px-4 py-8">
       <div className="mx-auto max-w-4xl">
-        <h1 className="mb-6 text-2xl font-bold text-foreground">📅 Lịch làm việc & Báo cáo</h1>
+        <h1 className="mb-6 text-2xl font-bold text-foreground">Lich lam viec & Bao cao</h1>
 
         {/* Admin user selector */}
         {isAdmin && (
@@ -205,20 +205,20 @@ function CalendarPage() {
           {/* Report form */}
           <div className="rounded-xl border border-border bg-card p-4">
             <h2 className="mb-3 text-sm font-bold text-foreground">
-              📝 Báo cáo ngày {selectedDate}
+              Bao cao ngay {selectedDate}
             </h2>
             <div className="space-y-3">
               <div>
                 <label className="mb-1 block text-xs text-muted-foreground">Số đơn hàng</label>
-                <input type="number" min={0} value={form.orders_count} onChange={(e) => setForm({ ...form, orders_count: Number(e.target.value) })} className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
+                <input type="text" inputMode="numeric" value={form.orders_count || ""} onChange={(e) => setForm({ ...form, orders_count: Number(e.target.value.replace(/\D/g, "")) || 0 })} placeholder="Nhap so don hang" className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
               </div>
               <div>
                 <label className="mb-1 block text-xs text-muted-foreground">Doanh thu (VNĐ)</label>
-                <input type="number" min={0} value={form.revenue} onChange={(e) => setForm({ ...form, revenue: Number(e.target.value) })} className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
+                <input type="text" inputMode="numeric" value={form.revenue || ""} onChange={(e) => setForm({ ...form, revenue: Number(e.target.value.replace(/\D/g, "")) || 0 })} placeholder="Nhap doanh thu" className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
               </div>
 
-              {/* Mood selector */}
-              <div>
+              {/* Mood */}
+              <div className="mt-1">
                 <label className="mb-2 block text-xs text-muted-foreground">Cảm xúc hôm nay</label>
                 <div className="flex gap-2">
                   {MOODS.map((m) => (
@@ -235,70 +235,6 @@ function CalendarPage() {
                 </div>
               </div>
 
-              {/* Priority tasks */}
-              <div>
-                <label className="mb-2 block text-xs text-muted-foreground">5 việc ưu tiên hôm nay</label>
-                <div className="space-y-1.5">
-                  {form.priority_tasks.map((task, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <span className="w-5 text-center text-xs font-bold text-purple-400">{i + 1}</span>
-                      <input
-                        type="text"
-                        placeholder={`Việc ưu tiên ${i + 1}`}
-                        value={task}
-                        onChange={(e) => {
-                          const updated = [...form.priority_tasks];
-                          updated[i] = e.target.value;
-                          setForm({ ...form, priority_tasks: updated });
-                        }}
-                        className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Daily todos */}
-              <div>
-                <label className="mb-2 block text-xs text-muted-foreground">Danh sách việc cần làm</label>
-                <div className="space-y-1.5">
-                  {form.daily_todos.map((todo, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = [...form.daily_todos];
-                          updated[i] = { ...updated[i], done: !updated[i].done };
-                          setForm({ ...form, daily_todos: updated });
-                        }}
-                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border text-xs ${todo.done ? "border-green-500 bg-green-500/20 text-green-400" : "border-border text-transparent"}`}
-                      >
-                        ✓
-                      </button>
-                      <span className={`flex-1 text-sm ${todo.done ? "text-muted-foreground line-through" : "text-foreground"}`}>{todo.text}</span>
-                      <button type="button" onClick={() => setForm({ ...form, daily_todos: form.daily_todos.filter((_, j) => j !== i) })} className="text-xs text-red-400 hover:text-red-300">✕</button>
-                    </div>
-                  ))}
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      placeholder="Thêm việc cần làm..."
-                      value={newTodo}
-                      onChange={(e) => setNewTodo(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && newTodo.trim()) {
-                          e.preventDefault();
-                          setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] });
-                          setNewTodo("");
-                        }
-                      }}
-                      className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
-                    />
-                    <button type="button" onClick={() => { if (newTodo.trim()) { setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] }); setNewTodo(""); } }} className="rounded-lg border border-purple-500/50 px-3 text-xs font-medium text-purple-400 hover:bg-purple-500/10">+</button>
-                  </div>
-                </div>
-              </div>
-
               <div>
                 <label className="mb-1 block text-xs text-muted-foreground">Ghi chú</label>
                 <textarea rows={3} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
@@ -310,9 +246,76 @@ function CalendarPage() {
           </div>
         </div>
 
+        {/* Priority tasks - separate section */}
+        <div className="mt-6 rounded-xl border border-border bg-card p-4">
+          <h2 className="mb-3 text-sm font-bold text-foreground">5 viec uu tien hom nay</h2>
+          <div className="space-y-1.5">
+            {form.priority_tasks.map((task, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <span className="w-5 text-center text-xs font-bold text-purple-400">{i + 1}</span>
+                <input
+                  type="text"
+                  placeholder={`Viec uu tien ${i + 1}`}
+                  value={task}
+                  onChange={(e) => {
+                    const updated = [...form.priority_tasks];
+                    updated[i] = e.target.value;
+                    setForm({ ...form, priority_tasks: updated });
+                  }}
+                  className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
+                />
+              </div>
+            ))}
+          </div>
+          <button onClick={handleSave} disabled={saving || (isAdmin && !!selectedUserId)} className="mt-3 w-full rounded-xl py-2 text-xs font-bold transition hover:scale-[1.02] disabled:opacity-50 border border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
+            Luu viec uu tien
+          </button>
+        </div>
+
+        {/* Daily todos - separate section */}
+        <div className="mt-6 rounded-xl border border-border bg-card p-4">
+          <h2 className="mb-3 text-sm font-bold text-foreground">Danh sach viec can lam</h2>
+          <div className="space-y-1.5">
+            {form.daily_todos.map((todo, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = [...form.daily_todos];
+                    updated[i] = { ...updated[i], done: !updated[i].done };
+                    setForm({ ...form, daily_todos: updated });
+                  }}
+                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border text-xs ${todo.done ? "border-green-500 bg-green-500/20 text-green-400" : "border-border text-transparent"}`}
+                >
+                  x
+                </button>
+                <span className={`flex-1 text-sm ${todo.done ? "text-muted-foreground line-through" : "text-foreground"}`}>{todo.text}</span>
+                <button type="button" onClick={() => setForm({ ...form, daily_todos: form.daily_todos.filter((_, j) => j !== i) })} className="text-xs text-red-400 hover:text-red-300">X</button>
+              </div>
+            ))}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Them viec can lam..."
+                value={newTodo}
+                onChange={(e) => setNewTodo(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && newTodo.trim()) {
+                    e.preventDefault();
+                    setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] });
+                    setNewTodo("");
+                  }
+                }}
+                className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
+              />
+              <button type="button" onClick={() => { if (newTodo.trim()) { setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] }); setNewTodo(""); } }} className="rounded-lg border border-purple-500/50 px-3 text-xs font-medium text-purple-400 hover:bg-purple-500/10">+</button>
+            </div>
+          </div>
+        </div>
+
         {/* Monthly summary */}
         <div className="mt-8 rounded-xl border border-border bg-card p-5">
-          <h2 className="mb-4 text-sm font-bold text-foreground">📊 Tổng hợp tháng</h2>
+          <h2 className="mb-4 text-sm font-bold text-foreground">Tong hop thang</h2>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="rounded-lg bg-purple-500/10 p-3">
               <p className="text-2xl font-bold text-purple-400">{currentSummary.totalOrders}</p>
@@ -377,7 +380,7 @@ function CalendarPage() {
 
         {/* Recent reports list */}
         <div className="mt-8">
-          <h2 className="mb-4 text-sm font-bold text-foreground">📋 Lịch sử báo cáo gần đây</h2>
+          <h2 className="mb-4 text-sm font-bold text-foreground">Lich su bao cao gan day</h2>
           <div className="space-y-2">
             {reports.slice(0, 10).map((r) => (
               <button key={r.id} onClick={() => setSelectedDate(r.report_date)} className="flex w-full items-center justify-between rounded-xl border border-border bg-card p-3 text-left transition hover:border-purple-500/50">
