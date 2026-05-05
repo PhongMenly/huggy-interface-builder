@@ -17,9 +17,12 @@ export type Database = {
       daily_reports: {
         Row: {
           created_at: string
+          daily_todos: Json | null
           id: string
+          mood: number | null
           notes: string | null
           orders_count: number | null
+          priority_tasks: Json | null
           report_date: string
           revenue: number | null
           status: string | null
@@ -28,9 +31,12 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          daily_todos?: Json | null
           id?: string
+          mood?: number | null
           notes?: string | null
           orders_count?: number | null
+          priority_tasks?: Json | null
           report_date: string
           revenue?: number | null
           status?: string | null
@@ -39,9 +45,12 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          daily_todos?: Json | null
           id?: string
+          mood?: number | null
           notes?: string | null
           orders_count?: number | null
+          priority_tasks?: Json | null
           report_date?: string
           revenue?: number | null
           status?: string | null
