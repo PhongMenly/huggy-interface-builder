@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { roadmaps } from "@/lib/missions-data";
 import { SaleMasterHero } from "@/components/SaleMasterHero";
 import { ProgressTracker } from "@/components/ProgressTracker";
 import { MissionCard } from "@/components/MissionCard";
 import { AppSidebar } from "@/components/AppSidebar";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -37,10 +39,16 @@ function Index() {
   const [progress, setProgress] = useState<Record<string, string[]>>({});
   const [activeRoadmap, setActiveRoadmap] = useState<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setProgress(loadProgress());
   }, []);
+
+  useEffect(() => {
+    if (!loading && !user) navigate({ to: "/login" });
+  }, [loading, user, navigate]);
 
   const checkedItemsForMission = useCallback(
     (missionId: string) => new Set(progress[missionId] || []),
@@ -123,6 +131,9 @@ function Index() {
       }
     }
   }, [currentRoadmap, currentRoadmapIndex]);
+
+  if (loading) return <div className="flex min-h-screen items-center justify-center bg-background"><p className="text-muted-foreground">Đang tải...</p></div>;
+  if (!user) return null;
 
   return (
     <div className="flex min-h-screen bg-background">
