@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { AppSidebar } from "@/components/AppSidebar";
 
 export const Route = createFileRoute("/calendar")({
   component: CalendarPage,
@@ -105,9 +106,10 @@ function CalendarPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-background px-4 py-8">
+    <div className="flex min-h-screen bg-background">
+      <AppSidebar />
+      <div className="flex-1 overflow-auto px-4 py-8">
       <div className="mx-auto max-w-4xl">
-        <button onClick={() => navigate({ to: "/" })} className="mb-6 text-sm text-purple-400 hover:underline">← Quay lại</button>
         <h1 className="mb-6 text-2xl font-bold text-foreground">📅 Lịch làm việc & Báo cáo</h1>
 
         <div className="grid gap-6 lg:grid-cols-2">
@@ -249,6 +251,7 @@ function CalendarPage() {
             {reports.length === 0 && <p className="text-center text-sm text-muted-foreground">Chưa có báo cáo nào</p>}
           </div>
         </div>
+    </div>
       </div>
     </div>
   );

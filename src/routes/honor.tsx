@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { AppSidebar } from "@/components/AppSidebar";
 
 export const Route = createFileRoute("/honor")({
   component: HonorPage,
@@ -65,9 +66,10 @@ function HonorPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-background px-4 py-8">
+    <div className="flex min-h-screen bg-background">
+      <AppSidebar />
+      <div className="flex-1 overflow-auto px-4 py-8">
       <div className="mx-auto max-w-3xl">
-        <button onClick={() => navigate({ to: "/" })} className="mb-6 text-sm text-purple-400 hover:underline">← Quay lại</button>
         <h1 className="mb-2 text-2xl font-bold text-foreground">🏆 Bảng Vinh Danh</h1>
         <p className="mb-8 text-sm text-muted-foreground">Chinh phục các mốc thành tích để nhận danh hiệu và phần thưởng</p>
 
@@ -155,6 +157,7 @@ function HonorPage() {
             ))}
           </div>
         </div>
+    </div>
       </div>
     </div>
   );
