@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { AppSidebar } from "@/components/AppSidebar";
 
 export const Route = createFileRoute("/profile")({
   component: ProfilePage,
@@ -65,7 +66,9 @@ function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-background px-4 py-8">
+    <div className="flex min-h-screen bg-background">
+      <AppSidebar />
+      <div className="flex-1 overflow-auto px-4 py-8">
       <div className="mx-auto max-w-lg">
         <h1 className="mb-6 text-2xl font-bold text-foreground">Hồ sơ cá nhân</h1>
 
@@ -104,6 +107,7 @@ function ProfilePage() {
           </button>
         </form>
 
+      </div>
       </div>
     </div>
   );
