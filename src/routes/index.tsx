@@ -4,6 +4,7 @@ import { roadmaps } from "@/lib/missions-data";
 import { SaleMasterHero } from "@/components/SaleMasterHero";
 import { ProgressTracker } from "@/components/ProgressTracker";
 import { MissionCard } from "@/components/MissionCard";
+import { AppSidebar } from "@/components/AppSidebar";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -124,7 +125,9 @@ function Index() {
   }, [currentRoadmap, currentRoadmapIndex]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background">
+      <AppSidebar />
+      <div className="flex-1 overflow-auto">
       <SaleMasterHero
         completedRoadmaps={completedRoadmaps}
         totalRoadmaps={roadmaps.length}
@@ -171,6 +174,7 @@ function Index() {
             </p>
           </div>
         )}
+      </div>
       </div>
     </div>
   );
