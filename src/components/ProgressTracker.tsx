@@ -27,7 +27,7 @@ export function ProgressTracker({
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-foreground">Tiến trình của bạn</h2>
+        <h2 className="text-lg font-semibold text-foreground">Năng lực của bạn</h2>
         <span className="text-sm font-medium text-purple-400">
           {roadmaps.filter((_, i) => {
             const r = roadmaps[i];
