@@ -7,6 +7,7 @@ import { ProgressTracker } from "@/components/ProgressTracker";
 import { MissionCard } from "@/components/MissionCard";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useAuth } from "@/hooks/useAuth";
+import { LevelVideos } from "@/components/LevelVideos";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -162,7 +163,15 @@ function Index() {
               <p className="mt-1 text-sm text-muted-foreground">
                 {currentRoadmap.description}
               </p>
+              {currentRoadmap.detailedDescription && (
+                <div className="mx-auto mt-3 max-w-xl rounded-lg border border-purple-500/20 bg-purple-500/5 px-4 py-3 text-left">
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {currentRoadmap.detailedDescription}
+                  </p>
+                </div>
+              )}
             </div>
+            <LevelVideos levelNumber={currentRoadmap.number} />
             <div className="space-y-3">
               {currentRoadmap.missions.map((mission, mIndex) => (
                 <MissionCard
