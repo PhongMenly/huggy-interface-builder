@@ -582,6 +582,7 @@ const roadmap4: Roadmap = {
   title: "Case Study & Nurture",
   emoji: "📚",
   description: "Học từ case study thực tế, nắm quy trình nurture và checklist làm việc hàng ngày",
+  detailedDescription: "Bên trong Level 4 bạn sẽ học: 8 case study thực tế từ học viên, quy trình nurture khách hàng qua 5 giai đoạn, checklist làm việc hàng ngày (sáng — trong ngày — tối), và toàn bộ hệ sinh thái sản phẩm KOL AI System.",
   missions: [
     {
       id: "case-studies",
