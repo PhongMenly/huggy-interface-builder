@@ -21,7 +21,18 @@ interface DailyReport {
   revenue: number;
   notes: string | null;
   status: string;
+  mood: number | null;
+  priority_tasks: string[];
+  daily_todos: { text: string; done: boolean }[];
 }
+
+const MOODS = [
+  { value: 1, label: "Chưa hài lòng", color: "#ef4444" },
+  { value: 2, label: "Bình thường", color: "#f97316" },
+  { value: 3, label: "Ổn định", color: "#eab308" },
+  { value: 4, label: "Hào hứng", color: "#22c55e" },
+  { value: 5, label: "Mạnh mẽ", color: "#a020f0" },
+];
 
 function CalendarPage() {
   const { user, loading } = useAuth();
@@ -33,9 +44,16 @@ function CalendarPage() {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   });
   const [compareMonth, setCompareMonth] = useState("");
-  const [form, setForm] = useState({ orders_count: 0, revenue: 0, notes: "" });
+  const [form, setForm] = useState({ orders_count: 0, revenue: 0, notes: "", mood: 0, priority_tasks: ["", "", "", "", ""] as string[], daily_todos: [] as { text: string; done: boolean }[] });
+  const [newTodo, setNewTodo] = useState("");
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  // Admin check
+  const isAdmin = user?.email === "phuowngvimmo25@gmail.com";
+  const [allUsers, setAllUsers] = useState<{ id: string; email: string; full_name: string }[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [allReports, setAllReports] = useState<(DailyReport & { user_id: string })[]>([]);
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
@@ -43,24 +61,41 @@ function CalendarPage() {
 
   const fetchReports = async () => {
     if (!user) return;
-    const { data } = await supabase
-      .from("daily_reports")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("report_date", { ascending: false });
-    if (data) setReports(data as DailyReport[]);
+    if (isAdmin && selectedUserId) {
+      const { data } = await supabase
+        .from("daily_reports")
+        .select("*")
+        .eq("user_id", selectedUserId)
+        .order("report_date", { ascending: false });
+      if (data) setReports(data.map((d: any) => ({ ...d, priority_tasks: d.priority_tasks || [], daily_todos: d.daily_todos || [] })));
+    } else {
+      const { data } = await supabase
+        .from("daily_reports")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("report_date", { ascending: false });
+      if (data) setReports(data.map((d: any) => ({ ...d, priority_tasks: d.priority_tasks || [], daily_todos: d.daily_todos || [] })));
+    }
   };
 
-  useEffect(() => { fetchReports(); }, [user]);
+  useEffect(() => { fetchReports(); }, [user, selectedUserId]);
+
+  // Fetch all users for admin
+  useEffect(() => {
+    if (!isAdmin || !user) return;
+    supabase.from("profiles").select("id, full_name").then(({ data }) => {
+      if (data) setAllUsers(data.map((p: any) => ({ id: p.id, email: "", full_name: p.full_name || "Thành viên" })));
+    });
+  }, [isAdmin, user]);
 
   // Load form when selecting a date
   useEffect(() => {
     const existing = reports.find((r) => r.report_date === selectedDate);
     if (existing) {
-      setForm({ orders_count: existing.orders_count, revenue: existing.revenue, notes: existing.notes || "" });
+      setForm({ orders_count: existing.orders_count, revenue: existing.revenue, notes: existing.notes || "", mood: existing.mood || 0, priority_tasks: existing.priority_tasks?.length ? [...existing.priority_tasks, ...Array(5 - existing.priority_tasks.length).fill("")].slice(0, 5) : ["", "", "", "", ""], daily_todos: existing.daily_todos || [] });
       setEditingId(existing.id);
     } else {
-      setForm({ orders_count: 0, revenue: 0, notes: "" });
+      setForm({ orders_count: 0, revenue: 0, notes: "", mood: 0, priority_tasks: ["", "", "", "", ""], daily_todos: [] });
       setEditingId(null);
     }
   }, [selectedDate, reports]);
@@ -68,10 +103,18 @@ function CalendarPage() {
   const handleSave = async () => {
     if (!user) return;
     setSaving(true);
+    const saveData = {
+      orders_count: form.orders_count,
+      revenue: form.revenue,
+      notes: form.notes,
+      mood: form.mood || null,
+      priority_tasks: form.priority_tasks.filter(Boolean),
+      daily_todos: form.daily_todos,
+    };
     if (editingId) {
-      await supabase.from("daily_reports").update({ ...form, updated_at: new Date().toISOString() }).eq("id", editingId);
+      await supabase.from("daily_reports").update({ ...saveData, updated_at: new Date().toISOString() }).eq("id", editingId);
     } else {
-      await supabase.from("daily_reports").insert({ user_id: user.id, report_date: selectedDate, ...form });
+      await supabase.from("daily_reports").insert({ user_id: user.id, report_date: selectedDate, ...saveData });
     }
     await fetchReports();
     setSaving(false);
@@ -111,6 +154,23 @@ function CalendarPage() {
       <div className="flex-1 overflow-auto px-4 py-8">
       <div className="mx-auto max-w-4xl">
         <h1 className="mb-6 text-2xl font-bold text-foreground">📅 Lịch làm việc & Báo cáo</h1>
+
+        {/* Admin user selector */}
+        {isAdmin && (
+          <div className="mb-6 rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4">
+            <h2 className="mb-2 text-sm font-bold text-yellow-400">Quản trị — Xem báo cáo thành viên</h2>
+            <div className="flex flex-wrap gap-2">
+              <button onClick={() => setSelectedUserId(null)} className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${!selectedUserId ? "border-yellow-500 bg-yellow-500/20 text-yellow-300" : "border-border text-muted-foreground hover:border-yellow-500/50"}`}>
+                Của tôi
+              </button>
+              {allUsers.filter(u => u.id !== user?.id).map((u) => (
+                <button key={u.id} onClick={() => setSelectedUserId(u.id)} className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${selectedUserId === u.id ? "border-yellow-500 bg-yellow-500/20 text-yellow-300" : "border-border text-muted-foreground hover:border-yellow-500/50"}`}>
+                  {u.full_name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Calendar */}
@@ -156,11 +216,94 @@ function CalendarPage() {
                 <label className="mb-1 block text-xs text-muted-foreground">Doanh thu (VNĐ)</label>
                 <input type="number" min={0} value={form.revenue} onChange={(e) => setForm({ ...form, revenue: Number(e.target.value) })} className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
               </div>
+
+              {/* Mood selector */}
+              <div>
+                <label className="mb-2 block text-xs text-muted-foreground">Cảm xúc hôm nay</label>
+                <div className="flex gap-2">
+                  {MOODS.map((m) => (
+                    <button
+                      key={m.value}
+                      type="button"
+                      onClick={() => setForm({ ...form, mood: m.value })}
+                      className={`flex-1 rounded-lg border py-2 text-center text-[10px] font-medium transition ${form.mood === m.value ? "scale-105 border-transparent text-white shadow-lg" : "border-border text-muted-foreground hover:border-white/30"}`}
+                      style={form.mood === m.value ? { backgroundColor: m.color } : {}}
+                    >
+                      {m.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Priority tasks */}
+              <div>
+                <label className="mb-2 block text-xs text-muted-foreground">5 việc ưu tiên hôm nay</label>
+                <div className="space-y-1.5">
+                  {form.priority_tasks.map((task, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span className="w-5 text-center text-xs font-bold text-purple-400">{i + 1}</span>
+                      <input
+                        type="text"
+                        placeholder={`Việc ưu tiên ${i + 1}`}
+                        value={task}
+                        onChange={(e) => {
+                          const updated = [...form.priority_tasks];
+                          updated[i] = e.target.value;
+                          setForm({ ...form, priority_tasks: updated });
+                        }}
+                        className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Daily todos */}
+              <div>
+                <label className="mb-2 block text-xs text-muted-foreground">Danh sách việc cần làm</label>
+                <div className="space-y-1.5">
+                  {form.daily_todos.map((todo, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = [...form.daily_todos];
+                          updated[i] = { ...updated[i], done: !updated[i].done };
+                          setForm({ ...form, daily_todos: updated });
+                        }}
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border text-xs ${todo.done ? "border-green-500 bg-green-500/20 text-green-400" : "border-border text-transparent"}`}
+                      >
+                        ✓
+                      </button>
+                      <span className={`flex-1 text-sm ${todo.done ? "text-muted-foreground line-through" : "text-foreground"}`}>{todo.text}</span>
+                      <button type="button" onClick={() => setForm({ ...form, daily_todos: form.daily_todos.filter((_, j) => j !== i) })} className="text-xs text-red-400 hover:text-red-300">✕</button>
+                    </div>
+                  ))}
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Thêm việc cần làm..."
+                      value={newTodo}
+                      onChange={(e) => setNewTodo(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && newTodo.trim()) {
+                          e.preventDefault();
+                          setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] });
+                          setNewTodo("");
+                        }
+                      }}
+                      className="flex-1 rounded-lg border border-border bg-muted/20 px-3 py-1.5 text-sm text-foreground"
+                    />
+                    <button type="button" onClick={() => { if (newTodo.trim()) { setForm({ ...form, daily_todos: [...form.daily_todos, { text: newTodo.trim(), done: false }] }); setNewTodo(""); } }} className="rounded-lg border border-purple-500/50 px-3 text-xs font-medium text-purple-400 hover:bg-purple-500/10">+</button>
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label className="mb-1 block text-xs text-muted-foreground">Ghi chú</label>
                 <textarea rows={3} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm text-foreground" />
               </div>
-              <button onClick={handleSave} disabled={saving} className="w-full rounded-xl py-2.5 text-sm font-bold transition hover:scale-[1.02] disabled:opacity-50" style={{ backgroundColor: "#ffd700", color: "#121212" }}>
+              <button onClick={handleSave} disabled={saving || (isAdmin && !!selectedUserId)} className="w-full rounded-xl py-2.5 text-sm font-bold transition hover:scale-[1.02] disabled:opacity-50" style={{ backgroundColor: "#ffd700", color: "#121212" }}>
                 {saving ? "Đang lưu..." : editingId ? "Cập nhật báo cáo" : "Gửi báo cáo"}
               </button>
             </div>
@@ -240,7 +383,12 @@ function CalendarPage() {
               <button key={r.id} onClick={() => setSelectedDate(r.report_date)} className="flex w-full items-center justify-between rounded-xl border border-border bg-card p-3 text-left transition hover:border-purple-500/50">
                 <div>
                   <p className="text-sm font-medium text-foreground">{r.report_date}</p>
-                  <p className="text-xs text-muted-foreground">{r.notes || "Không có ghi chú"}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {r.mood ? MOODS.find(m => m.value === r.mood)?.label + " · " : ""}{r.notes || "Không có ghi chú"}
+                  </p>
+                  {r.priority_tasks?.length > 0 && (
+                    <p className="mt-0.5 text-[10px] text-purple-400">{r.priority_tasks.length} việc ưu tiên</p>
+                  )}
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-purple-400">{r.orders_count} đơn</p>

@@ -21,6 +21,7 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [keyword, setKeyword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -34,6 +35,10 @@ function LoginPage() {
     e.preventDefault();
     setError("");
     setMessage("");
+    if (keyword.toLowerCase() !== "mastersale") {
+      setError("Từ khóa truy cập không đúng!");
+      return;
+    }
     setSubmitting(true);
     try {
       if (isLogin) {
@@ -142,6 +147,14 @@ function LoginPage() {
                 className="w-full rounded-xl border border-gray-600 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none"
               />
             )}
+            <input
+              type="text"
+              placeholder="Từ khóa truy cập"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              required
+              className="w-full rounded-xl border border-gray-600 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none"
+            />
             <input
               type="email"
               placeholder="Email"
