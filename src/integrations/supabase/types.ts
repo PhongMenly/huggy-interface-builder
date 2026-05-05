@@ -59,6 +59,30 @@ export type Database = {
         }
         Relationships: []
       }
+      level_videos: {
+        Row: {
+          created_at: string
+          id: string
+          level_number: number
+          title: string
+          video_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level_number: number
+          title?: string
+          video_url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level_number?: number
+          title?: string
+          video_url?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
