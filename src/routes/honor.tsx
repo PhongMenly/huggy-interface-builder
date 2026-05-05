@@ -4,6 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { AppSidebar } from "@/components/AppSidebar";
 
+interface MemberStats {
+  id: string;
+  full_name: string;
+  totalOrders: number;
+  totalRevenue: number;
+}
+
 export const Route = createFileRoute("/honor")({
   component: HonorPage,
   head: () => ({
@@ -43,6 +50,8 @@ function HonorPage() {
   const navigate = useNavigate();
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
+  const [members, setMembers] = useState<MemberStats[]>([]);
+  const isAdmin = user?.email === "phuowngvimmo25@gmail.com";
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
@@ -62,6 +71,30 @@ function HonorPage() {
       });
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return;
+    const fetchMembers = async () => {
+      const { data: profiles } = await supabase.from("profiles").select("id, full_name");
+      if (!profiles) return;
+      if (isAdmin) {
+        const { data: allReports } = await supabase.from("daily_reports").select("user_id, orders_count, revenue");
+        if (!allReports) return;
+        const statsMap = new Map<string, { orders: number; revenue: number }>();
+        allReports.forEach((r: any) => {
+          const prev = statsMap.get(r.user_id) || { orders: 0, revenue: 0 };
+          statsMap.set(r.user_id, { orders: prev.orders + (r.orders_count ?? 0), revenue: prev.revenue + Number(r.revenue ?? 0) });
+        });
+        setMembers(profiles.map((p: any) => {
+          const s = statsMap.get(p.id) || { orders: 0, revenue: 0 };
+          return { id: p.id, full_name: p.full_name || "Thanh vien", totalOrders: s.orders, totalRevenue: s.revenue };
+        }).sort((a, b) => b.totalOrders - a.totalOrders));
+      } else {
+        setMembers([{ id: user.id, full_name: profiles.find((p: any) => p.id === user.id)?.full_name || "Ban", totalOrders, totalRevenue }]);
+      }
+    };
+    fetchMembers();
+  }, [user, isAdmin, totalOrders, totalRevenue]);
+
   if (loading) return <div className="flex min-h-screen items-center justify-center bg-background"><p className="text-muted-foreground">Đang tải...</p></div>;
   if (!user) return null;
 
@@ -73,15 +106,25 @@ function HonorPage() {
         <h1 className="mb-2 text-2xl font-extrabold tracking-tight text-foreground">BẢNG VINH DANH</h1>
         <p className="mb-8 text-sm font-medium text-muted-foreground">Chinh phục các mốc thành tích để nhận danh hiệu và phần thưởng</p>
 
-        {/* Current stats */}
-        <div className="mb-8 grid grid-cols-2 gap-4">
-          <div className="rounded-xl border border-purple-500/30 bg-purple-500/10 p-5 text-center">
-            <p className="text-3xl font-bold text-purple-400">{totalOrders}</p>
-            <p className="text-xs text-muted-foreground">Tổng số đơn</p>
-          </div>
-          <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-5 text-center">
-            <p className="text-3xl font-bold text-yellow-400">{totalRevenue.toLocaleString()}</p>
-            <p className="text-xs text-muted-foreground">Tổng doanh thu (VNĐ)</p>
+        {/* Members list */}
+        <div className="mb-8">
+          <h2 className="mb-4 text-lg font-extrabold tracking-tight text-foreground">DANH SACH THANH VIEN</h2>
+          <div className="space-y-2">
+            {members.map((m) => (
+              <div key={m.id} className={`flex items-center justify-between rounded-xl border p-4 transition ${m.id === user?.id ? "border-purple-500/50 bg-purple-500/5" : "border-border bg-card"}`}>
+                <p className="text-sm font-bold text-foreground">{m.full_name}</p>
+                <div className="flex gap-4 text-right">
+                  <div>
+                    <p className="text-sm font-bold text-purple-400">{m.totalOrders}</p>
+                    <p className="text-[10px] text-muted-foreground">don</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-yellow-400">{m.totalRevenue.toLocaleString()}</p>
+                    <p className="text-[10px] text-muted-foreground">VND</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
