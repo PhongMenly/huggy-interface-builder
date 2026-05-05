@@ -115,6 +115,7 @@ export interface Roadmap {
   title: string;
   emoji: string;
   description: string;
+  detailedDescription: string;
   missions: Mission[];
 }
 
@@ -128,6 +129,7 @@ const roadmap1: Roadmap = {
   title: "Thu nhập & Hoa hồng",
   emoji: "💰",
   description: "Hiểu rõ cơ cấu thu nhập, hoa hồng và KPI theo từng giai đoạn phát triển",
+  detailedDescription: "Bên trong Level 1 bạn sẽ học: Cơ cấu lương cơ bản & hoa hồng theo từng giai đoạn (Học việc → Phát triển → Chiến binh), KPI tối thiểu và mục tiêu hàng tháng, bonus vượt target, và quy tắc làm việc của Phong Menly.",
   missions: [
     {
       id: "income-phase1",
@@ -242,6 +244,7 @@ const roadmap2: Roadmap = {
   title: "Kịch bản bán hàng & Xử lý tình huống",
   emoji: "🎯",
   description: "Nắm vững kịch bản hội thoại, FAQ và cách xử lý từ chối từ khách hàng",
+  detailedDescription: "Bên trong Level 2 bạn sẽ học: 6 kịch bản hội thoại thực tế với khách hàng, 7 câu hỏi thường gặp (FAQ) và câu trả lời chuẩn, 5 loại từ chối phổ biến và cách xử lý chuyên nghiệp — phong cách chuyên gia giáo dục, không ép mua.",
   missions: [
     {
       id: "scenarios",
@@ -397,6 +400,7 @@ const roadmap3: Roadmap = {
   title: "Quy trình Sale chuyên nghiệp",
   emoji: "📈",
   description: "Nắm vững quy trình từ lead đến chốt, công cụ hàng ngày và cách phân loại khách",
+  detailedDescription: "Bên trong Level 3 bạn sẽ học: Quy trình sale 7 bước từ thu lead đến chốt đơn, các công cụ làm việc hàng ngày (Zalo, CRM, Sheet...), cách phân loại 3 nhóm khách hàng (Lạnh, Ấm, Cũ) và chiến lược downsale.",
   missions: [
     {
       id: "sale-process",
