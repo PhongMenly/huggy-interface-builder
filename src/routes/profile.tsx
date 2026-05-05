@@ -67,8 +67,19 @@ function ProfilePage() {
   return (
     <div className="min-h-screen bg-background px-4 py-8">
       <div className="mx-auto max-w-lg">
-        <button onClick={() => navigate({ to: "/" })} className="mb-6 text-sm text-purple-400 hover:underline">← Quay lại</button>
-        <h1 className="mb-6 text-2xl font-bold text-foreground">👤 Hồ sơ cá nhân</h1>
+        <h1 className="mb-6 text-2xl font-bold text-foreground">Hồ sơ cá nhân</h1>
+
+        {/* Avatar from Google */}
+        {(user.user_metadata?.avatar_url || user.user_metadata?.picture) && (
+          <div className="mb-6 flex justify-center">
+            <img
+              src={user.user_metadata?.avatar_url || user.user_metadata?.picture}
+              alt="Avatar"
+              className="h-20 w-20 rounded-full border-3 border-purple-500 object-cover"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
 
         <div className="mb-6 rounded-xl border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground">Email</p>
@@ -93,9 +104,6 @@ function ProfilePage() {
           </button>
         </form>
 
-        <button onClick={async () => { await signOut(); navigate({ to: "/login" }); }} className="mt-6 w-full rounded-xl border border-red-500/30 py-3 text-sm font-medium text-red-400 transition hover:bg-red-500/10">
-          Đăng xuất
-        </button>
       </div>
     </div>
   );
