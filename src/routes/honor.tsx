@@ -51,7 +51,7 @@ function HonorPage() {
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [members, setMembers] = useState<MemberStats[]>([]);
-  const isAdmin = user?.email === "phuowngvimmo25@gmail.com";
+  const isAdmin = user?.email === "phuongvimmo25@gmail.com";
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
