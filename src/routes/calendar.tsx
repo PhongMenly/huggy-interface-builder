@@ -52,7 +52,7 @@ function CalendarPage() {
   const [existingTotals, setExistingTotals] = useState<{ orders_count: number; revenue: number } | null>(null);
 
   // Admin check
-  const isAdmin = user?.email === "phuowngvimmo25@gmail.com";
+  const isAdmin = user?.email === "phuongvimmo25@gmail.com";
   const [allUsers, setAllUsers] = useState<{ id: string; email: string; full_name: string }[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [allReports, setAllReports] = useState<(DailyReport & { user_id: string })[]>([]);
