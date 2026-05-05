@@ -114,8 +114,6 @@ function CalendarPage() {
         revenue: newRevenue,
         notes: form.notes,
         mood: form.mood || null,
-        priority_tasks: form.priority_tasks.filter(Boolean),
-        daily_todos: form.daily_todos,
         updated_at: new Date().toISOString(),
       }).eq("id", editingId);
     } else {
@@ -126,9 +124,33 @@ function CalendarPage() {
         revenue: form.revenue,
         notes: form.notes,
         mood: form.mood || null,
-        priority_tasks: form.priority_tasks.filter(Boolean),
-        daily_todos: form.daily_todos,
       });
+    }
+    await fetchReports();
+    setSaving(false);
+  };
+
+  const handleSavePriorityTasks = async () => {
+    if (!user) return;
+    setSaving(true);
+    const existing = reports.find((r) => r.report_date === selectedDate);
+    if (existing) {
+      await supabase.from("daily_reports").update({ priority_tasks: form.priority_tasks.filter(Boolean), updated_at: new Date().toISOString() }).eq("id", existing.id);
+    } else {
+      await supabase.from("daily_reports").insert({ user_id: user.id, report_date: selectedDate, priority_tasks: form.priority_tasks.filter(Boolean) });
+    }
+    await fetchReports();
+    setSaving(false);
+  };
+
+  const handleSaveDailyTodos = async () => {
+    if (!user) return;
+    setSaving(true);
+    const existing = reports.find((r) => r.report_date === selectedDate);
+    if (existing) {
+      await supabase.from("daily_reports").update({ daily_todos: form.daily_todos, updated_at: new Date().toISOString() }).eq("id", existing.id);
+    } else {
+      await supabase.from("daily_reports").insert({ user_id: user.id, report_date: selectedDate, daily_todos: form.daily_todos });
     }
     await fetchReports();
     setSaving(false);
