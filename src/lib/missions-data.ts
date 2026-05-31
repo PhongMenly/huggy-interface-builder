@@ -827,4 +827,441 @@ const roadmap4: Roadmap = {
 // EXPORT
 // ============================================================
 
-export const roadmaps: Roadmap[] = [roadmap1, roadmap2, roadmap3, roadmap4];
+// ============================================================
+// LỘ TRÌNH 5: QUY TRÌNH SALE 8 BƯỚC NÂNG CAO
+// ============================================================
+
+const roadmap5: Roadmap = {
+  id: "advanced-process",
+  number: 5,
+  title: "Quy trình Sale 8 bước nâng cao",
+  emoji: "🚀",
+  description:
+    "Quy trình bán hàng chuyên sâu từ tạo lead, hẹn gặp, xây dựng quan hệ đến chốt đơn và chăm sóc dài hạn.",
+  detailedDescription:
+    "Bên trong Level 5 bạn sẽ học quy trình bán hàng 8 bước nâng cao: (1) Thu thập thông tin & tạo Lead, (2) Hẹn gặp, (3) Xây dựng quan hệ thân tình tin cậy, (4) Xác định nhu cầu, (5) Trình bày lợi ích, (6) Xử lý từ chối, (7) Chốt đơn, (8) Chăm sóc & bán hàng tiếp tục. Kết thúc bằng tư duy '2 cộng 1' — luôn xác thực khách hàng và xin lời giới thiệu khéo léo trong mọi bước.",
+  missions: [
+    {
+      id: "adv-step1",
+      number: "5.1",
+      title: "Bước 1 — Thu thập thông tin & tạo Lead",
+      emoji: "🎯",
+      description:
+        "Xây dựng hồ sơ, chân dung và danh sách khách hàng tiềm năng qua nhiều kênh khác nhau. Đây là bước nền tảng — không có lead thì không có đơn.",
+      workRules: [
+        {
+          rule: "1. Cách đặt câu hỏi (Tạo Lead)",
+          detail:
+            "Đặt câu hỏi mở, dễ trả lời để khách hàng tự nguyện chia sẻ thông tin. Mỗi câu trả lời là một mảnh ghép trong chân dung khách hàng. Tuyệt đối không hỏi như phỏng vấn — hỏi như một người bạn quan tâm thật sự.",
+        },
+        {
+          rule: "2. Mở nhóm Zalo mới (Dồn nhóm)",
+          detail:
+            "Tạo nhóm Zalo theo chủ đề khách hàng quan tâm (AI, kiếm tiền online, KOL...), dồn người từ các nguồn về một nơi để dễ chăm sóc, đăng nội dung giá trị và theo dõi tương tác.",
+        },
+        {
+          rule: "3. Poster Facebook trả lời comment (Khách từ Facebook)",
+          detail:
+            "Đăng bài hoặc poster có nội dung gợi mở để khách comment. Mỗi comment là một lead. Phản hồi nhanh, kéo về inbox để bắt đầu hội thoại 1-1.",
+        },
+        {
+          rule: "4. Fanpage trả lời tự động (Chuyển hướng vào Zalo)",
+          detail:
+            "Cài đặt chatbot/auto-reply trên Fanpage để giới thiệu giá trị và đưa khách qua Zalo cá nhân hoặc nhóm Zalo — nơi có thể chăm sóc sâu hơn.",
+        },
+        {
+          rule: "5. Quà tặng & đăng ký email",
+          detail:
+            "Tạo lý do để khách hàng để lại thông tin: comment trong nhóm để nhận quà, hoặc đăng ký email để nhận tài liệu/ebook miễn phí. Đây là cách thu lead chất lượng và xây danh sách email dài hạn.",
+        },
+        {
+          rule: "6. Chạy quảng cáo ra lead",
+          detail:
+            "Chạy Facebook Ads / Google Ads nhắm đúng tệp khách hàng mục tiêu. Mục tiêu quảng cáo: thu lead (form điền thông tin) hoặc kéo về landing page có form.",
+        },
+        {
+          rule: "7. Xin lời giới thiệu để tạo ra lead",
+          detail:
+            "Khách hàng cũ hài lòng → xin họ giới thiệu bạn bè. Đây là nguồn lead chất lượng cao nhất, tỷ lệ chốt cao nhất, chi phí thấp nhất.",
+        },
+        {
+          rule: "⚠️ Lưu ý quan trọng",
+          detail:
+            "Trước khi bán bất cứ điều gì, cần tạo ra comment, tương tác và sự quen biết. Khách lạ không mua hàng — chỉ khách đã tin tưởng mới mua.",
+        },
+      ],
+      checklist: [
+        { id: "s1-1", label: "Đã áp dụng ít nhất 3 cách tạo lead khác nhau" },
+        { id: "s1-2", label: "Đã tạo nhóm Zalo hoặc danh sách lead riêng" },
+        { id: "s1-3", label: "Đã thực hành đặt câu hỏi mở để khách trả lời" },
+      ],
+    },
+    {
+      id: "adv-step2",
+      number: "5.2",
+      title: "Bước 2 — Hẹn gặp khách hàng",
+      emoji: "📅",
+      description:
+        "Chuyển từ tương tác văn bản sang cuộc gặp gỡ thực sự (Zoom, video, sự kiện). Chỉ khi hẹn gặp được, bạn mới có cơ hội giúp đỡ và tăng tỷ lệ chốt sale.",
+      workRules: [
+        {
+          rule: "1. Đặt câu hỏi đơn giản trong nhóm Zalo",
+          detail:
+            "Dùng câu hỏi dễ trả lời để mở hội thoại 1-1 trước khi mời hẹn gặp. Ví dụ: 'Anh/chị đang gặp khó khăn gì với AI?' — khi họ trả lời, đó là cánh cửa để mời hẹn gặp.",
+        },
+        {
+          rule: "2. Hẹn gặp hướng dẫn trên Zoom",
+          detail:
+            "Mời khách lên Zoom 1-1 hoặc 1-nhiều để demo, hướng dẫn, tư vấn. Zoom giúp xây dựng kết nối thật, khách hàng cảm thấy được quan tâm cá nhân.",
+        },
+        {
+          rule: "3. Hẹn gặp thông qua video",
+          detail:
+            "Gửi video ngắn cá nhân hoá ('Em gửi anh video này riêng cho anh') để mời họ xem trước rồi hẹn trao đổi.",
+        },
+        {
+          rule: "4. Hẹn gặp thông qua bài viết",
+          detail:
+            "Đăng bài viết có giá trị, kèm CTA mời inbox hoặc đăng ký buổi hẹn. Bài viết hay tạo ra lý do tự nhiên để khách chủ động hẹn.",
+        },
+        {
+          rule: "5. Hẹn gặp thông qua hẹn gặp",
+          detail:
+            "Trong buổi gặp đầu tiên, luôn chốt lịch buổi gặp tiếp theo (follow-up call, demo sâu hơn). Chuỗi hẹn gặp = chuỗi tin cậy.",
+        },
+        {
+          rule: "6. Hẹn gặp thông qua lời giới thiệu",
+          detail:
+            "Khi có người giới thiệu, hãy xin họ giới thiệu trực tiếp qua tin nhắn 3 bên. Tỷ lệ khách đồng ý hẹn gặp cao hơn nhiều.",
+        },
+        {
+          rule: "⚠️ Tại sao phải hẹn gặp?",
+          detail:
+            "Chỉ khi hẹn gặp được, bạn mới có cơ hội thực sự giúp đỡ người cần giúp và tăng tỷ lệ bán hàng thành công. Chat text không bao giờ tạo được mức độ tin cậy bằng cuộc gặp trực tiếp.",
+        },
+      ],
+      checklist: [
+        { id: "s2-1", label: "Đã hiểu 5 cách hẹn gặp khác nhau" },
+        { id: "s2-2", label: "Đã thực hành mời ít nhất 3 khách lên Zoom" },
+        { id: "s2-3", label: "Đã chốt lịch follow-up sau mỗi buổi gặp" },
+      ],
+    },
+    {
+      id: "adv-step3",
+      number: "5.3",
+      title: "Bước 3 — Xây dựng quan hệ thân tình & tin cậy",
+      emoji: "🤝",
+      description:
+        "Trước khi bán bất cứ thứ gì, phải tạo được sự tin cậy và hứng thú thật sự. Đây là bước quyết định khách có 'mở lòng' với bạn hay không.",
+      workRules: [
+        {
+          rule: "1. Tặng quà & đăng bài Vinh danh",
+          detail:
+            "Tặng quà cá nhân hoá, đăng bài viết vinh danh khách hàng trên group — làm họ cảm thấy được trân trọng. Tổ chức cuộc thi, kết nối khách hàng với nhau để tạo cộng đồng thật.",
+        },
+        {
+          rule: "2. Game tạo ảnh đơn giản",
+          detail:
+            "Tổ chức game ghép ảnh, thay ảnh, đổi style ảnh bằng AI — vừa vui vừa giới thiệu sản phẩm một cách tự nhiên, không bán hàng trực tiếp.",
+        },
+        {
+          rule: "3. Tổ chức sự kiện kết nối trực tiếp",
+          detail:
+            "Offline meetup, workshop, training — nơi khách hàng gặp nhau và gặp bạn ngoài đời. Quan hệ offline mạnh hơn online gấp nhiều lần.",
+        },
+        {
+          rule: "4. Nhắn tin hàng loạt 1-vs-1 hỏi thăm",
+          detail:
+            "Gửi tin nhắn cá nhân (không spam) hỏi thăm, chúc mừng sinh nhật, chia sẻ tài liệu phù hợp. Mỗi tin nhắn phải cá nhân hoá — không copy-paste cho 100 người.",
+        },
+        {
+          rule: "5. Tìm hiểu sở thích, mục tiêu, điểm mạnh, thành tựu",
+          detail:
+            "Lưu lại trong hồ sơ khách hàng (Sheet/CRM): sở thích, mục tiêu cuộc sống, điểm mạnh, thành tựu đã có, những gì họ đang hứng thú. Đây là 'mỏ vàng' để bạn trò chuyện đúng tần số.",
+        },
+        {
+          rule: "⚠️ Lưu ý tuyệt đối",
+          detail:
+            "Tuyệt đối KHÔNG bán hàng nếu khách chưa tin cậy hoặc chưa cảm thấy hứng thú. Bán quá sớm = mất khách vĩnh viễn.",
+        },
+      ],
+      checklist: [
+        { id: "s3-1", label: "Đã có hồ sơ chi tiết của ít nhất 10 khách hàng" },
+        { id: "s3-2", label: "Đã đăng bài vinh danh hoặc tặng quà cho khách" },
+        { id: "s3-3", label: "Đã nhắn tin 1-1 hỏi thăm khách đều đặn" },
+      ],
+    },
+    {
+      id: "adv-step4",
+      number: "5.4",
+      title: "Bước 4 — Xác định nhu cầu khách hàng",
+      emoji: "🔍",
+      description:
+        "Đặt câu hỏi và lắng nghe để hiểu thật sự khách muốn gì, đau ở đâu, đầu tư được bao nhiêu. Hiểu sai nhu cầu = trình bày sai = mất đơn.",
+      workRules: [
+        {
+          rule: "1. Đặt câu hỏi và lắng nghe",
+          detail:
+            "Tỷ lệ vàng: nói 20%, nghe 80%. Câu hỏi tốt mở ra câu trả lời sâu — và câu trả lời sâu cho bạn biết phải bán gì, bán như thế nào.",
+        },
+        {
+          rule: "2. Xác định mong muốn lớn nhất",
+          detail:
+            "Khách muốn đạt được điều gì lớn nhất? Tự do tài chính? Nổi tiếng? Có thời gian cho gia đình? Đây là 'đích đến' bạn cần kết nối với sản phẩm.",
+        },
+        {
+          rule: "3. Xác định nỗi đau thầm kín",
+          detail:
+            "Khách đang khổ vì điều gì? Nỗi đau càng sâu, càng cấp bách → động lực mua càng mạnh. Đào sâu bằng câu hỏi 'tại sao' liên tiếp.",
+        },
+        {
+          rule: "4. Xác định sự thật ngầm hiểu (Insight)",
+          detail:
+            "Insight = điều khách nghĩ nhưng không nói ra. Khi bạn nói trúng insight, khách sẽ ồ lên 'đúng rồi, đúng cái em đang nghĩ!' — và bạn thắng.",
+        },
+        {
+          rule: "5. Xác định số tiền có thể đầu tư",
+          detail:
+            "Hỏi khéo léo về ngân sách. Nếu khách chỉ có 5 triệu mà bạn pitch gói 50 triệu thì vô nghĩa. Biết ngân sách → chọn đúng gói để chốt.",
+        },
+        {
+          rule: "6. Xác định vị thế hiện tại",
+          detail:
+            "Khách đang ở đâu trong hành trình: mới bắt đầu, đã làm 1 năm, đã có kết quả nhỏ, đã thất bại nhiều lần? Vị thế khác → giải pháp khác.",
+        },
+        {
+          rule: "7. Xác định vùng hiểu biết",
+          detail:
+            "Khách hiểu về AI/Sale/KOL ở mức nào? Người mới cần giải thích cơ bản, người đã biết cần giải pháp nâng cao. Nói sai trình độ = mất uy tín.",
+        },
+        {
+          rule: "8. Xác định tính cách",
+          detail:
+            "Khách thuộc kiểu nào: nhanh quyết định hay cân nhắc lâu, thích con số hay thích cảm xúc, sợ rủi ro hay thích thử nghiệm? Điều chỉnh cách trình bày theo tính cách.",
+        },
+        {
+          rule: "9. Xác định những thứ từng trải qua",
+          detail:
+            "Khách đã thử qua khoá học/sản phẩm nào? Vì sao thất bại/thành công? Hiểu để không lặp lại lỗi cũ và nhấn vào điểm khác biệt của bạn.",
+        },
+        {
+          rule: "⚠️ Nhắc nhở",
+          detail:
+            "Hãy nhìn vào hồ sơ vuông tròn (chân dung khách hàng) mà bạn đang làm việc mỗi ngày. Hồ sơ càng đầy đủ — sale càng dễ.",
+        },
+      ],
+      checklist: [
+        { id: "s4-1", label: "Đã có template 9 câu hỏi xác định nhu cầu" },
+        { id: "s4-2", label: "Đã thực hành đào sâu insight với khách thật" },
+        { id: "s4-3", label: "Đã ghi chú nhu cầu vào hồ sơ từng khách" },
+      ],
+    },
+    {
+      id: "adv-step5",
+      number: "5.5",
+      title: "Bước 5 — Trình bày lợi ích & giải pháp",
+      emoji: "🎤",
+      description:
+        "Không trình bày tính năng — trình bày LỢI ÍCH. Ngắn gọn, đánh đúng vào thứ duy nhất khách hàng cần.",
+      workRules: [
+        {
+          rule: "1. Trình bày lợi ích mà tính năng mang lại",
+          detail:
+            "Sai: 'Sản phẩm có tính năng AI dựng video'. Đúng: 'Anh sẽ tiết kiệm 8 tiếng quay video mỗi tuần để có thời gian cho con'. Tính năng → Lợi ích → Cảm xúc.",
+        },
+        {
+          rule: "2. Trình bày lợi ích chủ chốt",
+          detail:
+            "Trong tất cả lợi ích, chọn 1 lợi ích mà khách quan tâm NHẤT (đã biết ở bước 4) và nhấn mạnh nó. Đánh đúng điểm chốt → tăng tỷ lệ chốt sale.",
+        },
+        {
+          rule: "3. Gửi thông tin bằng Landing Page",
+          detail:
+            "Sau khi pitch xong, gửi link landing page có đầy đủ chi tiết, testimonial, case study, giá. Khách có chỗ xem lại — bạn không phải nhắc lại nhiều lần.",
+        },
+        {
+          rule: "4. Trình bày lợi ích của lợi ích",
+          detail:
+            "Đào sâu thêm 1 tầng: lợi ích → lợi ích của lợi ích đó. Ví dụ: 'Tiết kiệm thời gian → có thời gian → ở bên gia đình → con cái hạnh phúc'. Cảm xúc mới chốt đơn.",
+        },
+        {
+          rule: "5. Trình bày luôn cần ngắn gọn nhất",
+          detail:
+            "Đánh đúng vào lợi ích của MỘT thứ duy nhất mà khách cần. Trình bày dài dòng = khách bị loãng = không chốt.",
+        },
+        {
+          rule: "⚠️ Quy tắc vàng",
+          detail:
+            "Không trình bày mình tính năng — luôn trình bày kèm lợi ích cụ thể. Khách không mua tính năng, khách mua sự thay đổi trong cuộc đời họ.",
+        },
+      ],
+      checklist: [
+        { id: "s5-1", label: "Đã viết ra cặp 'tính năng → lợi ích' cho từng sản phẩm" },
+        { id: "s5-2", label: "Đã có landing page sẵn sàng gửi cho khách" },
+        { id: "s5-3", label: "Đã thực hành pitch dưới 3 phút" },
+      ],
+    },
+    {
+      id: "adv-step6",
+      number: "5.6",
+      title: "Bước 6 — Xử lý sự từ chối",
+      emoji: "🛡️",
+      description:
+        "Xử lý từ chối trong tâm trí khách hàng TRƯỚC khi họ kịp từ chối. Đây là khác biệt giữa sale nghiệp dư và sale chuyên nghiệp.",
+      workRules: [
+        {
+          rule: "1. Xử lý từ chối bằng câu hỏi mặc định kết quả",
+          detail:
+            "Thay vì hỏi 'Anh có mua không?', hỏi 'Anh muốn thanh toán chuyển khoản hay thẻ?'. Câu hỏi mặc định khách đã đồng ý, chỉ chọn cách thực hiện.",
+        },
+        {
+          rule: "2. Xử lý bằng 'được mua' thay vì 'phải mua'",
+          detail:
+            "Chuyển vị thế: không phải bạn năn nỉ khách mua, mà khách đang được cơ hội mua. Ví dụ: 'Chương trình chỉ nhận 20 học viên — anh có muốn em giữ slot cho anh không?'",
+        },
+        {
+          rule: "3. Xử lý bằng sự khan hiếm",
+          detail:
+            "Số lượng có hạn, deadline rõ ràng, ưu đãi sắp hết. Khan hiếm thật (không giả) sẽ thúc đẩy quyết định. Đừng tạo khan hiếm giả — khách phát hiện sẽ mất uy tín mãi mãi.",
+        },
+        {
+          rule: "4. Xử lý bằng giá trị lớn",
+          detail:
+            "Khi khách kêu đắt, đừng giảm giá — hãy tăng giá trị: bonus, mentor 1-1, cộng đồng, tài liệu, sự kiện. Khách so sánh giá trị nhận được với số tiền bỏ ra.",
+        },
+        {
+          rule: "5. Xử lý bằng việc đã thu thập đủ thông tin",
+          detail:
+            "Khi đã hiểu sâu nhu cầu (Bước 4), bạn có thể nói: 'Em hiểu anh đang lo X, nhưng dựa trên những gì anh chia sẻ, đây chính xác là thứ giúp anh giải quyết Y'. Dữ liệu thắng cảm tính.",
+        },
+        {
+          rule: "⚠️ Quy tắc xử lý từ chối",
+          detail:
+            "Hãy chắc chắn bạn xử lý sự từ chối trong tâm trí khách hàng TRƯỚC khi họ có ý định từ chối. Dự đoán câu hỏi và đáp trước — khách sẽ không kịp nghĩ ra lý do từ chối.",
+        },
+      ],
+      checklist: [
+        { id: "s6-1", label: "Đã liệt kê 5 lý do từ chối phổ biến + cách xử lý" },
+        { id: "s6-2", label: "Đã thực hành xử lý từ chối với đồng đội" },
+        { id: "s6-3", label: "Đã áp dụng kỹ thuật khan hiếm thật vào sale" },
+      ],
+    },
+    {
+      id: "adv-step7",
+      number: "5.7",
+      title: "Bước 7 — Chốt đơn",
+      emoji: "✅",
+      description:
+        "Khoảnh khắc quyết định. Đưa ra giá, gói, quà tặng và bằng chứng xã hội để khách quyết ngay — không cho khoảng trống suy nghĩ lại.",
+      workRules: [
+        {
+          rule: "1. Đưa ra mức giá & những gì họ sẽ nhận được",
+          detail:
+            "Liệt kê rõ ràng: gói X giá Y, bao gồm A, B, C, D. Càng cụ thể càng dễ chốt. Mơ hồ = khách lưỡng lự.",
+        },
+        {
+          rule: "2. Quà tặng kèm",
+          detail:
+            "Tặng kèm thêm bonus có giá trị (ebook, template, mentor session, slot sự kiện...) để khách cảm thấy được hơn số tiền họ bỏ ra.",
+        },
+        {
+          rule: "3. Giới hạn quà tặng",
+          detail:
+            "Quà chỉ áp dụng cho X người đầu / trong Y giờ tới. Giới hạn rõ ràng → thúc quyết định ngay, không 'để mai tính'.",
+        },
+        {
+          rule: "4. Thông báo liên tục về người đã mua",
+          detail:
+            "Chụp ảnh chuyển khoản (che thông tin), screenshot khách đăng ký, đăng vào group. Bằng chứng xã hội: 'người khác đã mua' = giảm rủi ro tâm lý cho khách đang lưỡng lự.",
+        },
+        {
+          rule: "5. Nhấn mạnh kết quả khách sẽ có khi tham gia",
+          detail:
+            "Vẽ ra bức tranh tương lai: 'Sau 3 tháng anh sẽ có X, sau 6 tháng anh sẽ Y'. Khách mua KẾT QUẢ, không mua khoá học.",
+        },
+        {
+          rule: "⚠️ Quy tắc chốt đơn",
+          detail:
+            "Khi đã tạo đủ giá trị, đã xử lý từ chối, đã có bằng chứng xã hội — đừng ngại chốt. Im lặng sau khi đưa ra lời mời mua là chiến lược: ai nói trước trong khoảnh khắc đó thường... thua.",
+        },
+      ],
+      checklist: [
+        { id: "s7-1", label: "Đã chuẩn bị bảng giá + bonus rõ ràng" },
+        { id: "s7-2", label: "Đã có hệ thống bằng chứng xã hội (screenshot, testimonial)" },
+        { id: "s7-3", label: "Đã thực hành kỹ thuật 'im lặng sau khi chốt'" },
+      ],
+    },
+    {
+      id: "adv-step8",
+      number: "5.8",
+      title: "Bước 8 — Chăm sóc & bán hàng tiếp tục",
+      emoji: "💎",
+      description:
+        "Sale chuyên nghiệp kiếm tiền từ khách CŨ nhiều hơn khách mới. Upsale, downsale, affiliate — vòng đời khách hàng càng dài, thu nhập càng cao.",
+      workRules: [
+        {
+          rule: "1. Hướng dẫn dùng link affiliate hiệu quả",
+          detail:
+            "Khách hài lòng → biến họ thành đối tác affiliate. Hướng dẫn họ cách share link, nội dung mẫu, kỹ thuật giới thiệu. Họ kiếm tiền — bạn cũng kiếm tiền.",
+        },
+        {
+          rule: "2. Nhắn tin riêng & chăm sóc định kỳ",
+          detail:
+            "Lên lịch chăm sóc: hỏi thăm tiến độ, chia sẻ tài liệu mới, mời tham gia sự kiện Zoom. Đặc biệt nhắn TRƯỚC sự kiện Zoom để mời khách lên — chỗ chốt sale upsell.",
+        },
+        {
+          rule: "3. Nhắn lại cho khách đã từng chăm sóc",
+          detail:
+            "Khách từng quan tâm nhưng chưa mua → 1-3 tháng sau nhắn lại với góc tiếp cận mới. Hoàn cảnh đã thay đổi — có thể giờ họ sẵn sàng mua.",
+        },
+        {
+          rule: "4. Downsale & Upsale",
+          detail:
+            "Khách không đủ tiền mua gói lớn → Downsale gói nhỏ hơn để giữ khách. Khách đã mua gói nhỏ và hài lòng → Upsale gói cao hơn, sản phẩm khác trong hệ sinh thái.",
+        },
+        {
+          rule: "⚠️ Quy tắc chăm sóc",
+          detail:
+            "Nóng giận nhưng khôn khéo, chỉ ở mức vừa phải. Luôn cần sự tử tế và chân thành — khách hàng cảm nhận được khi bạn thực sự quan tâm hay chỉ đang muốn moi tiền.",
+        },
+      ],
+      checklist: [
+        { id: "s8-1", label: "Đã có lịch chăm sóc khách hàng định kỳ" },
+        { id: "s8-2", label: "Đã thực hiện ít nhất 1 lần upsale thành công" },
+        { id: "s8-3", label: "Đã re-engage khách hàng cũ chưa chốt trước đây" },
+      ],
+    },
+    {
+      id: "adv-bonus",
+      number: "5.9",
+      title: "BONUS — Tư duy '2 cộng 1'",
+      emoji: "⭐",
+      description:
+        "Tư duy xuyên suốt mọi bước: luôn xác thực khách hàng + luôn xin lời giới thiệu một cách khéo léo.",
+      workRules: [
+        {
+          rule: "1. Xác thực & kiểm tra đối tượng và nhu cầu khách hàng",
+          detail:
+            "Trước khi đầu tư thời gian sale, kiểm tra: đây có đúng tệp khách mục tiêu không? Họ có nhu cầu thật không hay chỉ tò mò? Sale đúng người = tiết kiệm thời gian gấp 10 lần.",
+        },
+        {
+          rule: "2. Xin lời giới thiệu trong MỌI bước",
+          detail:
+            "Không chỉ xin sau khi chốt — xin ở mọi điểm chạm: khi tặng quà, khi tổ chức event, khi khách khen sản phẩm. Khéo léo lồng ghép: 'Anh có ai bạn bè đang quan tâm chủ đề này không?'",
+        },
+        {
+          rule: "3. Xin lời giới thiệu trả phí",
+          detail:
+            "Sẵn sàng trả hoa hồng/quà cho người giới thiệu. Lời giới thiệu trả phí vẫn rẻ hơn nhiều so với quảng cáo, và tỷ lệ chốt cao hơn nhiều lần.",
+        },
+      ],
+      checklist: [
+        { id: "bn-1", label: "Đã hiểu và áp dụng tư duy '2 cộng 1'" },
+        { id: "bn-2", label: "Đã có script xin lời giới thiệu khéo léo" },
+        { id: "bn-3", label: "Đã thiết lập chương trình affiliate / giới thiệu trả phí" },
+      ],
+    },
+  ],
+};
+
+export const roadmaps: Roadmap[] = [roadmap1, roadmap2, roadmap3, roadmap4, roadmap5];

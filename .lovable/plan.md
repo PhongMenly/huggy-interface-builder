@@ -1,113 +1,47 @@
+## Mục tiêu
 
-# Sale Master AI — Ứng dụng đào tạo Sale KOL AI System
+Bổ sung **Level 5 — Quy trình bán hàng 8 bước nâng cao** vào lộ trình đào tạo, với đầy đủ nội dung chi tiết theo từng bước để người dùng vừa đọc vừa làm theo.
 
-## Tổng quan
+## Cấu trúc Level 5
 
-Xây dựng ứng dụng đào tạo gamified cho phòng Sale, theo đúng phong cách dark theme của thanthukolaisystem.lovable.app. Nhân viên sale (VinSale) phải hoàn thành từng nhiệm vụ tuần tự, mỗi nhiệm vụ chứa đầy đủ nội dung từ tài liệu gốc, có mô tả dễ hiểu, checklist xác nhận, và hệ thống mở khóa.
+**Roadmap mới** (`roadmap5`):
+- emoji: 🚀
+- title: "Quy trình Sale 8 bước nâng cao"
+- description: "Quy trình bán hàng chuyên sâu từ tạo lead, hẹn gặp, xây dựng quan hệ đến chốt đơn và chăm sóc dài hạn."
+- detailedDescription: Tóm tắt 8 bước + tư duy "2 cộng 1".
 
-## Cấu trúc ứng dụng — 4 Lộ trình chính
+**8 nhiệm vụ tuần tự (5.1 → 5.8)** — mỗi nhiệm vụ là một bước trong quy trình:
 
-### LỘ TRÌNH 1: THU NHẬP & HOA HỒNG (Mở khóa đầu tiên)
-**Nhiệm vụ 1.1 — Giai đoạn Học việc (Tháng 1-3)**
-- Lương cơ bản: 8.000.000 VND
-- Hoa hồng: 10%/đơn = 135.000 VND/đơn
-- KPI: 20-30 đơn/tháng → thu nhập ~10.700.000 VND
-- Trọng tâm: Học quy trình, build lead, shadow Phong
+| # | Tiêu đề | Emoji |
+|---|---------|-------|
+| 5.1 | Thu thập thông tin & tạo Lead | 🎯 |
+| 5.2 | Hẹn gặp khách hàng | 📅 |
+| 5.3 | Xây dựng mối quan hệ thân tình & tin cậy | 🤝 |
+| 5.4 | Xác định nhu cầu khách hàng | 🔍 |
+| 5.5 | Trình bày lợi ích & giải pháp | 🎤 |
+| 5.6 | Xử lý sự từ chối | 🛡️ |
+| 5.7 | Chốt đơn | ✅ |
+| 5.8 | Chăm sóc & bán hàng tiếp tục (Upsale/Downsale) | 💎 |
 
-**Nhiệm vụ 1.2 — Giai đoạn Phát triển (Tháng 4-6)**
-- Lương: 10-12 triệu, hoa hồng 15%, KPI 36-46 đơn
-- Thu nhập ~18-19 triệu
+Bonus cuối Level 5: **Nhiệm vụ 5.9 — Tư duy "2 cộng 1"** (xác thực khách + xin lời giới thiệu khéo léo, kể cả lời giới thiệu trả phí).
 
-**Nhiệm vụ 1.3 — Giai đoạn Chiến binh (Tháng 7-12)**
-- Lương: 13-15 triệu, hoa hồng 20%, bonus vượt KPI
-- Thu nhập ~27-28.5 triệu
+## Cách hiển thị nội dung từng bước
 
-**Nhiệm vụ 1.4 — Quy tắc làm việc Phong Menly**
-- KPI tối thiểu, thử việc 30 ngày
+Tận dụng field `workRules` đã có sẵn renderer (tiêu đề kỹ thuật + mô tả) để mỗi đầu mục trong từng bước hiển thị thành một thẻ riêng — không cần thêm component mới.
 
-### LỘ TRÌNH 2: KỊCH BẢN BÁN HÀNG & XỬ LÝ TÌNH HUỐNG
-**Nhiệm vụ 2.1 — Kịch bản hội thoại thực tế (Bài 1)**
-- 6 tình huống: Hỏi slot, điều kiện học, quá nhiều thứ, nhân bản giọng/mặt, thiết bị, kiếm tiền
-- Mỗi tình huống có: Khách nói gì → Sale phản hồi → Mục đích
+Mỗi nhiệm vụ sẽ chứa:
+- `description`: tóm tắt mục đích bước đó
+- `workRules[]`: list các kỹ thuật/đầu mục trong bước (ví dụ Bước 1 có 7 mục: Cách đặt câu hỏi, Mở nhóm Zalo mới, Poster Facebook, Fanpage trả lời tự động, Quà tặng & email, Chạy quảng cáo lead, Xin lời giới thiệu)
+- Phần "Lưu ý" của từng bước nhét vào nhiệm vụ dưới dạng một `workRule` cuối có tiêu đề "⚠️ Lưu ý quan trọng"
+- `checklist[]`: 2–4 mục xác nhận để mở khóa bước tiếp theo (vd: "Đã áp dụng ít nhất 2 cách tạo lead", "Đã thực hành đặt câu hỏi mở")
 
-**Nhiệm vụ 2.2 — FAQ & Câu trả lời chuẩn (Bài 2)**
-- 7 câu hỏi thường gặp + câu trả lời mẫu + ghi chú
+## Tích hợp
 
-**Nhiệm vụ 2.3 — Xử lý từ chối (Bài 3)**
-- 5 loại từ chối + cách xử lý + câu nói mẫu
+- Thêm `roadmap5` vào export cuối file: `export const roadmaps = [roadmap1, roadmap2, roadmap3, roadmap4, roadmap5]`
+- Hệ thống unlock tuần tự, ProgressTracker, LevelVideos (level 5), MissionCard đều tự động hoạt động — không cần sửa component.
 
-### LỘ TRÌNH 3: QUY TRÌNH SALE CHUYÊN NGHIỆP
-**Nhiệm vụ 3.1 — Quy trình Sale từng bước (Bài 4)**
-- Nguồn lead (Facebook, Zalo, Email)
-- 7 bước: Làm thân → Thu lead → Hẹn gặp → Xác định nhu cầu → Đặt câu hỏi ngược → Gửi Landing page → Follow up
-- Chiến thuật downsale
-- Mỗi bước có câu mẫu chi tiết
+## Files thay đổi
 
-**Nhiệm vụ 3.2 — Công cụ Sale hàng ngày (Bài 5)**
-- Bảng công cụ: Facebook Inbox, Ads, Group, Zalo, Email, YouTube, Landing page, Whop, Zoom, Lovable App
-- Mỗi công cụ: Mục đích + dùng ở bước nào
+- `src/lib/missions-data.ts` — thêm `roadmap5` đầy đủ nội dung 8 bước + bonus, append vào mảng `roadmaps`.
 
-**Nhiệm vụ 3.3 — Phân loại 3 nhóm khách (Bài 9)**
-- Khách lạnh (Cold): 5 bước phản ứng
-- Khách ấm (Warm): 5 bước phản ứng
-- Khách cũ (Existing): 5 bước phản ứng
-- Quy tắc ghi nhớ 1 dòng cho mỗi nhóm
-
-### LỘ TRÌNH 4: CASE STUDY & NURTURE
-**Nhiệm vụ 4.1 — 8 Case Study thực tế (Bài 7)**
-- Mỗi case: Xuất phát điểm → Vấn đề → Kết quả → Dùng khi nào → Câu dẫn
-- Bảng tra nhanh: Loại khách → Case phù hợp
-
-**Nhiệm vụ 4.2 — Nội dung Nurture (Bài 8)**
-- 5 giai đoạn nurture + gửi gì + mục đích
-- 5 quy tắc nurture cho sale
-
-**Nhiệm vụ 4.3 — Checklist Sale hàng ngày**
-- Sáng: 3 việc
-- Trong ngày: 3 việc
-- Tối: 2 việc
-
-**Nhiệm vụ 4.4 — Hệ sinh thái sản phẩm**
-- Phễu: FREE → ENTRY → CORE → PREMIUM
-- Links cộng đồng
-
-## Thiết kế giao diện
-
-Theo đúng design system đã học từ thanthukolaisystem.lovable.app:
-
-- **Trang chính (Hero)**: Badge "🏆 SALE MASTER AI" → Heading "Chào mừng VinSale đến với Sale Master AI" → CTA vàng gold
-- **Progress tracker**: 4 lộ trình ngang, mở khóa tuần tự
-- **Cards nhiệm vụ**: Accordion mở rộng, nền #1e1e1e, checklist xác nhận
-- **Nội dung bên trong**: Hiển thị đầy đủ text, bảng, câu mẫu — format rõ ràng với heading, bullet points, highlight boxes
-- **Dark theme**: Nền #121212, accent tím, CTA vàng, text trắng/xám
-
-## Cấu trúc kỹ thuật
-
-| File | Mục đích |
-|------|----------|
-| `src/routes/index.tsx` | Trang chính với hero + 4 lộ trình |
-| `src/components/SaleMasterHero.tsx` | Hero section |
-| `src/components/ProgressTracker.tsx` | Thanh tiến trình 4 lộ trình |
-| `src/components/MissionCard.tsx` | Card nhiệm vụ có accordion |
-| `src/components/MissionContent.tsx` | Nội dung chi tiết bên trong mỗi nhiệm vụ |
-| `src/components/ChecklistItem.tsx` | Checkbox xác nhận hoàn thành |
-| `src/components/ScenarioCard.tsx` | Card tình huống (khách nói / sale phản hồi) |
-| `src/components/CaseStudyCard.tsx` | Card case study |
-| `src/components/SalesToolTable.tsx` | Bảng công cụ sale |
-| `src/components/ProductEcosystem.tsx` | Phễu sản phẩm |
-| `src/lib/missions-data.ts` | Toàn bộ dữ liệu 4 lộ trình + nhiệm vụ |
-
-## Tính năng
-
-- Lưu tiến trình bằng localStorage (không cần backend ban đầu)
-- Mở khóa tuần tự: hoàn thành checklist lộ trình 1 → mở lộ trình 2
-- Accordion mở rộng/thu gọn cho mỗi nhiệm vụ
-- Mỗi nhiệm vụ có checklist xác nhận, đủ items thì đánh dấu hoàn thành
-- Responsive cho mobile và desktop
-- **Không bỏ sót bất kỳ thông tin nào** từ tài liệu gốc
-
-## Lưu ý quan trọng
-
-- Toàn bộ 9 bài trong tài liệu sẽ được đưa vào đầy đủ, không tóm tắt
-- Mỗi tình huống, FAQ, case study đều có mô tả chi tiết giúp người dùng dễ hiểu
-- Giao diện ưu tiên trải nghiệm đọc và thực hành, không phải chỉ hiển thị text
+Không cần migration, không sửa component.
