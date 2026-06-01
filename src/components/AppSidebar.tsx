@@ -13,7 +13,11 @@ export function AppSidebar() {
 
   const tabs = [
     { label: "Trang chủ", to: "/" as const },
-    { label: "Lịch làm việc", to: "/calendar" as const },
+    {
+      label: "Lịch làm việc",
+      to: "https://docs.google.com/spreadsheets/d/1acVhPbHbq2SVlWL6M6uALznk5Ti0wPRKDhCu2JuqFdo/edit?usp=sharing" as const,
+      external: true as const,
+    },
     { label: "Vinh danh", to: "/honor" as const },
     { label: "Hồ sơ", to: "/profile" as const },
   ];
@@ -50,20 +54,37 @@ export function AppSidebar() {
 
       {/* Tabs */}
       <nav className="flex-1 space-y-1 p-3">
-        {tabs.map((tab) => (
-          <Link
-            key={tab.to}
-            to={tab.to}
-            onClick={() => setMobileOpen(false)}
-            className={`block rounded-lg border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
-              isActive(tab.to)
-                ? "border-purple-500 bg-purple-500/20 text-purple-300 shadow-[0_0_12px_rgba(160,32,240,0.3)]"
-                : "border-white/10 text-gray-300 hover:border-purple-500/50 hover:bg-purple-500/10 hover:text-white hover:shadow-[0_0_16px_rgba(160,32,240,0.25)]"
-            }`}
-          >
-            {!collapsed && tab.label}
-          </Link>
-        ))}
+        {tabs.map((tab) => {
+          const className = `block rounded-lg border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
+            !("external" in tab) && isActive(tab.to)
+              ? "border-purple-500 bg-purple-500/20 text-purple-300 shadow-[0_0_12px_rgba(160,32,240,0.3)]"
+              : "border-white/10 text-gray-300 hover:border-purple-500/50 hover:bg-purple-500/10 hover:text-white hover:shadow-[0_0_16px_rgba(160,32,240,0.25)]"
+          }`;
+          if ("external" in tab) {
+            return (
+              <a
+                key={tab.to}
+                href={tab.to}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileOpen(false)}
+                className={className}
+              >
+                {!collapsed && tab.label}
+              </a>
+            );
+          }
+          return (
+            <Link
+              key={tab.to}
+              to={tab.to}
+              onClick={() => setMobileOpen(false)}
+              className={className}
+            >
+              {!collapsed && tab.label}
+            </Link>
+          );
+        })}
       </nav>
 
       {/* Sign out */}
