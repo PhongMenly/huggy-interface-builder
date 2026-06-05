@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import heroCover from "@/assets/hero-cover.png.asset.json";
 
 interface SaleMasterHeroProps {
   completedRoadmaps: number;
@@ -9,85 +10,86 @@ interface SaleMasterHeroProps {
 
 export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: SaleMasterHeroProps) {
   const { user } = useAuth();
-  const [showVideo, setShowVideo] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+  const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || "Bạn";
 
   return (
-    <section className="relative flex flex-col items-center justify-center px-4 py-10 text-center sm:py-16">
-      {/* Background image */}
+    <section className="relative flex flex-col items-center justify-center overflow-hidden px-4 py-10 text-center sm:py-14">
+      {/* Gold radial glow background */}
       <div
-        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-15 blur-sm"
-        style={{ backgroundImage: "url('/images/hero-bg.png')" }}
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,215,0,0.18) 0%, rgba(255,215,0,0.06) 35%, transparent 70%)",
+        }}
       />
 
-
-      {/* YouTube video */}
-      {showVideo && (
-        <div className="relative z-10 mb-6 mt-10 w-full max-w-2xl overflow-hidden rounded-xl border border-border shadow-2xl sm:mb-8 sm:mt-0 sm:rounded-2xl">
-          <div className="relative pb-[56.25%]">
-            <iframe
-              className="absolute inset-0 h-full w-full"
-              src="https://www.youtube.com/embed/K2H9p7IGhdo?autoplay=1&rel=0"
-              title="Master Sale AI Introduction"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-          <button
-            onClick={() => setShowVideo(false)}
-            className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-xs text-white hover:bg-black/80"
-          >
-            ✕
-          </button>
-        </div>
-      )}
-
-      <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-300">
-        🏆 SALE MASTER AI
+      {/* Workshop chip */}
+      <span
+        className="relative z-10 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wider sm:text-sm"
+        style={{ borderColor: "rgba(255,215,0,0.4)", color: "#ffd700", backgroundColor: "rgba(255,215,0,0.05)" }}
+      >
+        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full" style={{ backgroundColor: "#ffd700" }} />
+        SALE MASTER AI · KOL AI SYSTEM
       </span>
-      <h1 className="max-w-3xl text-2xl font-bold leading-tight text-foreground sm:text-3xl md:text-5xl">
-        {user ? `Xin chào ${user.user_metadata?.full_name || user.user_metadata?.name || "Bạn"}! ` : "Chào mừng Bạn đến với "}
-        <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-          Master Sale AI
-        </span>
+
+      {/* Headline */}
+      <h1 className="relative z-10 max-w-3xl text-3xl font-black leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
+        <span style={{ color: "#ffd700" }}>0</span>
+        <span className="mx-2 inline-block opacity-70" style={{ color: "#ffd700" }}>→</span>
+        <span style={{ color: "#ffd700" }}>MASTER</span>
+        <br />
+        <span className="text-white">HÀNH TRÌNH </span>
+        <span style={{ color: "#ffd700" }}>SALE AI</span>
       </h1>
-      {user ? (
-        <p className="mt-4 max-w-xl text-base text-muted-foreground">
-          Chào mừng bạn trở lại! Tiếp tục hoàn thành các nhiệm vụ để trở thành Sale chuyên nghiệp.
-        </p>
-      ) : (
-        <p className="mt-4 max-w-xl text-base text-muted-foreground">
-          Hoàn thành từng lộ trình để trở thành Sale chuyên nghiệp của KOL AI System.
-          Mỗi nhiệm vụ giúp bạn nắm vững kỹ năng và kiến thức cần thiết.
+      <p className="relative z-10 mt-3 text-sm text-gray-400 sm:text-base">
+        Lộ trình <span className="font-semibold text-white">5 Level</span> · Kịch bản AI · Chốt đơn · Bứt phá doanh số
+      </p>
+
+      {/* Hero cover image */}
+      <div className="group relative z-10 mt-8 w-full max-w-3xl">
+        <div
+          className="pointer-events-none absolute -inset-4 rounded-3xl opacity-60 blur-2xl transition duration-700 group-hover:opacity-90"
+          style={{ background: "radial-gradient(ellipse at center, rgba(255,215,0,0.45), transparent 70%)" }}
+        />
+        <div className="relative overflow-hidden rounded-2xl border-2 shadow-2xl transition duration-500 hover:scale-[1.01]"
+          style={{ borderColor: "rgba(255,215,0,0.5)", boxShadow: "0 0 60px rgba(255,215,0,0.25)" }}
+        >
+          <img
+            src={heroCover.url}
+            alt="Sale Master AI - Hành trình Sale chuyên nghiệp"
+            className="block h-auto w-full"
+            loading="eager"
+          />
+        </div>
+      </div>
+
+      {/* Welcome line */}
+      {user && (
+        <p className="relative z-10 mt-6 text-sm text-gray-300 sm:text-base">
+          👋 Xin chào <span className="font-bold" style={{ color: "#ffd700" }}>{displayName}</span> — sẵn sàng chinh phục?
         </p>
       )}
+
+      {/* CTA */}
       <button
         onClick={onStart}
-        className="mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-base font-bold transition-all hover:scale-105 sm:mt-8 sm:px-8 sm:py-4 sm:text-lg"
+        className="relative z-10 mt-6 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-base font-extrabold uppercase tracking-wide shadow-lg transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(255,215,0,0.6)] sm:px-9 sm:py-4 sm:text-lg"
         style={{ backgroundColor: "#ffd700", color: "#121212" }}
       >
         🚀 BẮT ĐẦU HÀNH TRÌNH
       </button>
-      {user && (
-        <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-          <span className="inline-block h-2 w-2 rounded-full bg-green-400" />
-          <span>Đang đăng nhập: {user.email}</span>
-          <span className="mx-1">•</span>
-          <span>Năng lực: {completedRoadmaps}/{totalRoadmaps} lộ trình</span>
-        </div>
-      )}
-      {!user && (
-        <p className="mt-4 text-sm text-muted-foreground">
-          Năng lực: {completedRoadmaps}/{totalRoadmaps} lộ trình hoàn thành
-        </p>
-      )}
+      <p className="relative z-10 mt-2 text-xs text-gray-500">
+        Hoàn thành 5 Level để mở khoá danh hiệu Sale Master
+      </p>
+
+      {/* Stats */}
+      <div className="relative z-10 mt-6 flex items-center gap-2 text-xs text-gray-400 sm:text-sm">
+        <span className="inline-block h-2 w-2 rounded-full bg-green-400" />
+        <span className="font-medium text-white">
+          {completedRoadmaps}<span className="text-gray-500">/{totalRoadmaps}</span>
+        </span>
+        <span>lộ trình hoàn thành</span>
+      </div>
     </section>
   );
 }
