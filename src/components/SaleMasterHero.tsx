@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import heroCover from "@/assets/hero-cover.png.asset.json";
+import heroCover from "@/assets/hero-cover-v2.png.asset.json";
 
 interface SaleMasterHeroProps {
   completedRoadmaps: number;
@@ -51,13 +51,13 @@ export function SaleMasterHero({ completedRoadmaps, totalRoadmaps, onStart }: Sa
           className="pointer-events-none absolute -inset-4 rounded-3xl opacity-60 blur-2xl transition duration-700 group-hover:opacity-90"
           style={{ background: "radial-gradient(ellipse at center, rgba(255,215,0,0.45), transparent 70%)" }}
         />
-        <div className="relative overflow-hidden rounded-2xl border-2 shadow-2xl transition duration-500 hover:scale-[1.01]"
+        <div className="relative aspect-video overflow-hidden rounded-2xl border-2 shadow-2xl transition duration-500 hover:scale-[1.01]"
           style={{ borderColor: "rgba(255,215,0,0.5)", boxShadow: "0 0 60px rgba(255,215,0,0.25)" }}
         >
           <img
             src={heroCover.url}
             alt="Sale Master AI - Hành trình Sale chuyên nghiệp"
-            className="block h-auto w-full"
+            className="block h-full w-full object-cover"
             loading="eager"
           />
         </div>
