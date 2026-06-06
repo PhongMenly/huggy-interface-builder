@@ -100,7 +100,7 @@ function LinksPage() {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="min-w-0 flex-1 truncate text-xs font-medium text-lilac"
+                    className="min-w-0 flex-1 truncate text-xs font-medium"
                     style={{ color: "#bb86fc" }}
                     title={link.url}
                   >
