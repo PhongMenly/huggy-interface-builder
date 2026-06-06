@@ -8,8 +8,8 @@ export const Route = createFileRoute("/profile")({
   component: ProfilePage,
   head: () => ({
     meta: [
-      { title: "Hồ sơ — Master Sale AI" },
-      { name: "description", content: "Cập nhật thông tin cá nhân" },
+      { title: "Huấn Luyện SKILL AI — Master Sale AI" },
+      { name: "description", content: "Huấn luyện kỹ năng AI chuyên sâu" },
     ],
   }),
 });
