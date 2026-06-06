@@ -8,6 +8,7 @@ import { MissionCard } from "@/components/MissionCard";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { LevelVideos } from "@/components/LevelVideos";
+import { stripEmoji } from "@/lib/text";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -157,16 +158,25 @@ function Index() {
         {currentRoadmap ? (
           <>
             <div className="mb-6 text-center">
-              <h2 className="text-xl font-bold text-foreground">
-                {currentRoadmap.emoji} {currentRoadmap.title}
+              <span
+                className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wider"
+                style={{ borderColor: "rgba(255,215,0,0.4)", color: "#ffd700", backgroundColor: "rgba(255,215,0,0.05)" }}
+              >
+                Level {currentRoadmap.number}
+              </span>
+              <h2 className="mt-3 text-2xl font-black tracking-tight text-white sm:text-3xl">
+                {stripEmoji(currentRoadmap.title)}
               </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {currentRoadmap.description}
+              <p className="mx-auto mt-2 max-w-xl text-sm text-gray-400">
+                {stripEmoji(currentRoadmap.description)}
               </p>
               {currentRoadmap.detailedDescription && (
-                <div className="mx-auto mt-3 max-w-xl rounded-lg border border-purple-500/20 bg-purple-500/5 px-4 py-3 text-left">
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {currentRoadmap.detailedDescription}
+                <div
+                  className="mx-auto mt-3 max-w-xl rounded-lg border px-4 py-3 text-left"
+                  style={{ borderColor: "rgba(255,215,0,0.25)", backgroundColor: "rgba(255,215,0,0.05)" }}
+                >
+                  <p className="text-sm leading-relaxed text-gray-300">
+                    {stripEmoji(currentRoadmap.detailedDescription)}
                   </p>
                 </div>
               )}
