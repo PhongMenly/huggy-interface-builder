@@ -1,343 +1,366 @@
 import type { Mission } from "@/lib/missions-data";
+import { Section } from "./Section";
+import { stripEmoji } from "@/lib/text";
 
 interface MissionContentProps {
   mission: Mission;
 }
 
+const GOLD = "#ffd700";
+const GOLD_SOFT = "rgba(255,215,0,0.08)";
+const GOLD_BORDER = "rgba(255,215,0,0.25)";
+
 export function MissionContent({ mission }: MissionContentProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Income Phases */}
-      {mission.incomePhases?.map((phase, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4 sm:p-5">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-300">
-            {phase.phase} • {phase.period}
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <InfoRow label="💵 Lương cơ bản" value={phase.baseSalary} />
-            <InfoRow label="📊 Hoa hồng" value={phase.commission} />
-            <InfoRow label="🎯 KPI tối thiểu" value={phase.kpiMin} />
-            <InfoRow label="🏆 KPI mục tiêu" value={phase.kpiTarget} />
-            <InfoRow label="💰 Hoa hồng/đơn" value={phase.commissionPerDeal} />
-            <InfoRow label="🔥 Thu nhập ước tính" value={phase.estimatedIncome} highlight />
-            {phase.bonus && <InfoRow label="🎁 Bonus vượt KPI" value={phase.bonus} />}
-          </div>
-          <div className="mt-3 rounded-lg bg-purple-500/5 p-3">
-            <p className="text-xs text-muted-foreground">
-              <span className="font-semibold text-purple-300">Trọng tâm:</span> {phase.focus}
-            </p>
-          </div>
-        </div>
-      ))}
+      {mission.incomePhases && mission.incomePhases.length > 0 && (
+        <Section title="Thu nhập & KPI" count={mission.incomePhases.length} defaultOpen>
+          {mission.incomePhases.map((phase, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER, backgroundColor: GOLD_SOFT }}>
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: GOLD_SOFT, color: GOLD }}>
+                {stripEmoji(phase.phase)} · {stripEmoji(phase.period)}
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <InfoRow label="Lương cơ bản" value={phase.baseSalary} />
+                <InfoRow label="Hoa hồng" value={phase.commission} />
+                <InfoRow label="KPI tối thiểu" value={phase.kpiMin} />
+                <InfoRow label="KPI mục tiêu" value={phase.kpiTarget} />
+                <InfoRow label="Hoa hồng / đơn" value={phase.commissionPerDeal} />
+                <InfoRow label="Thu nhập ước tính" value={phase.estimatedIncome} highlight />
+                {phase.bonus && <InfoRow label="Bonus vượt KPI" value={phase.bonus} />}
+              </div>
+              <div className="mt-3 rounded-lg p-3" style={{ backgroundColor: GOLD_SOFT }}>
+                <p className="text-xs text-gray-300">
+                  <span className="font-semibold" style={{ color: GOLD }}>Trọng tâm:</span>{" "}
+                  {stripEmoji(phase.focus)}
+                </p>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Work Rules */}
-      {mission.workRules?.map((rule, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-2 text-sm font-bold text-foreground">{rule.rule}</h4>
-          <p className="text-sm text-muted-foreground">{rule.detail}</p>
-        </div>
-      ))}
+      {mission.workRules && mission.workRules.length > 0 && (
+        <Section title="Quy tắc làm việc" count={mission.workRules.length}>
+          {mission.workRules.map((rule, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <h4 className="mb-2 text-sm font-bold text-white">{stripEmoji(rule.rule)}</h4>
+              <p className="text-sm text-gray-300">{stripEmoji(rule.detail)}</p>
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Scenarios */}
-      {mission.scenarios && (
-        <div className="space-y-4">
-          <div className="rounded-lg bg-purple-500/5 p-3">
-            <p className="text-sm font-medium text-purple-300">
-              💡 Phong cách bán hàng cốt lõi: Chuyên gia giáo dục khách hàng
+      {mission.scenarios && mission.scenarios.length > 0 && (
+        <Section title="Kịch bản xử lý khách" count={mission.scenarios.length}>
+          <div className="rounded-lg p-3" style={{ backgroundColor: GOLD_SOFT }}>
+            <p className="text-sm font-medium" style={{ color: GOLD }}>
+              Phong cách bán hàng cốt lõi: Chuyên gia giáo dục khách hàng
             </p>
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="mt-1 text-xs text-gray-300">
               Không chiều khách, không ép mua — dẫn dắt khách tự nhận ra vấn đề và tự muốn mua.
             </p>
           </div>
           {mission.scenarios.map((sc, i) => (
-            <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-              <h4 className="mb-3 text-sm font-bold text-foreground">{sc.title}</h4>
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <h4 className="mb-3 text-sm font-bold text-white">{stripEmoji(sc.title)}</h4>
               <div className="space-y-2">
-                <div className="rounded-lg bg-card p-3">
-                  <p className="text-xs font-semibold text-muted-foreground">🙋 Khách nói:</p>
-                  <p className="mt-1 text-sm italic text-foreground">"{sc.customerSays}"</p>
-                </div>
-                <div className="rounded-lg p-3" style={{ backgroundColor: "rgba(160, 32, 240, 0.08)" }}>
-                  <p className="text-xs font-semibold text-purple-300">💬 Sale phản hồi:</p>
-                  <p className="mt-1 text-sm text-foreground">{sc.saleResponse}</p>
-                </div>
-                <div className="rounded-lg bg-card p-3">
-                  <p className="text-xs font-semibold text-muted-foreground">🎯 Mục đích:</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{sc.purpose}</p>
-                </div>
+                <Block label="Khách nói">
+                  <p className="text-sm italic text-white">"{stripEmoji(sc.customerSays)}"</p>
+                </Block>
+                <Block label="Sale phản hồi" gold>
+                  <p className="text-sm text-white">{stripEmoji(sc.saleResponse)}</p>
+                </Block>
+                <Block label="Mục đích">
+                  <p className="text-sm text-gray-300">{stripEmoji(sc.purpose)}</p>
+                </Block>
               </div>
             </div>
           ))}
-        </div>
+        </Section>
       )}
 
       {/* FAQs */}
-      {mission.faqs?.map((faq, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-2 text-sm font-bold text-foreground">
-            Câu {i + 1}: {faq.question}
-          </h4>
-          <div className="mb-2 rounded-lg p-3" style={{ backgroundColor: "rgba(160, 32, 240, 0.08)" }}>
-            <p className="text-xs font-semibold text-purple-300">✅ Trả lời chuẩn:</p>
-            <p className="mt-1 text-sm text-foreground">{faq.answer}</p>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            <span className="font-semibold">📝 Ghi chú:</span> {faq.note}
-          </p>
-        </div>
-      ))}
+      {mission.faqs && mission.faqs.length > 0 && (
+        <Section title="Câu hỏi thường gặp" count={mission.faqs.length}>
+          {mission.faqs.map((faq, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <h4 className="mb-2 text-sm font-bold text-white">
+                Câu {i + 1}: {stripEmoji(faq.question)}
+              </h4>
+              <Block label="Trả lời chuẩn" gold>
+                <p className="text-sm text-white">{stripEmoji(faq.answer)}</p>
+              </Block>
+              <p className="mt-2 text-xs text-gray-400">
+                <span className="font-semibold">Ghi chú:</span> {stripEmoji(faq.note)}
+              </p>
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Rejections */}
-      {mission.rejections?.map((rej, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-2 text-sm font-bold text-foreground">
-            Từ chối {i + 1}: {rej.type}
-          </h4>
-          <div className="mb-2 rounded-lg bg-card p-3">
-            <p className="text-xs font-semibold text-muted-foreground">🛠️ Cách xử lý:</p>
-            <p className="mt-1 text-sm text-foreground">{rej.handling}</p>
-          </div>
-          <div className="rounded-lg p-3" style={{ backgroundColor: "rgba(160, 32, 240, 0.08)" }}>
-            <p className="text-xs font-semibold text-purple-300">💬 Câu nói mẫu:</p>
-            <p className="mt-1 text-sm text-foreground">{rej.samplePhrase}</p>
-          </div>
-        </div>
-      ))}
+      {mission.rejections && mission.rejections.length > 0 && (
+        <Section title="Xử lý từ chối" count={mission.rejections.length}>
+          {mission.rejections.map((rej, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <h4 className="mb-2 text-sm font-bold text-white">
+                Từ chối {i + 1}: {stripEmoji(rej.type)}
+              </h4>
+              <Block label="Cách xử lý">
+                <p className="text-sm text-white">{stripEmoji(rej.handling)}</p>
+              </Block>
+              <div className="mt-2">
+                <Block label="Câu nói mẫu" gold>
+                  <p className="text-sm text-white">{stripEmoji(rej.samplePhrase)}</p>
+                </Block>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Lead Sources */}
-      {mission.leadSources && (
-        <div className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-3 text-sm font-bold text-foreground">📡 Nguồn lead đang khai thác:</h4>
+      {mission.leadSources && mission.leadSources.length > 0 && (
+        <Section title="Nguồn lead đang khai thác" count={mission.leadSources.length}>
           <ul className="space-y-2">
             {mission.leadSources.map((src, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-foreground">
-                <span className="mt-0.5 text-purple-400">•</span>
-                {src}
+              <li key={i} className="flex items-start gap-2 text-sm text-white">
+                <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: GOLD }} />
+                {stripEmoji(src)}
               </li>
             ))}
           </ul>
-        </div>
+        </Section>
       )}
 
       {/* Sale Steps */}
-      {mission.saleSteps?.map((step, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-2 text-sm font-bold text-foreground">{step.step}</h4>
-          <p className="mb-3 text-xs text-muted-foreground">
-            <span className="font-semibold text-purple-300">🎯 Mục tiêu:</span> {step.goal}
-          </p>
-          <div className="space-y-1">
-            <p className="text-xs font-semibold text-muted-foreground">💬 Câu mẫu:</p>
-            {step.samplePhrases.map((phrase, j) => (
-              <p key={j} className="flex items-start gap-2 pl-2 text-sm text-foreground">
-                <span className="mt-0.5 text-purple-400">→</span>
-                {phrase}
+      {mission.saleSteps && mission.saleSteps.length > 0 && (
+        <Section title="Quy trình bán hàng" count={mission.saleSteps.length}>
+          {mission.saleSteps.map((step, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <h4 className="mb-2 text-sm font-bold text-white">{stripEmoji(step.step)}</h4>
+              <p className="mb-3 text-xs text-gray-300">
+                <span className="font-semibold" style={{ color: GOLD }}>Mục tiêu:</span> {stripEmoji(step.goal)}
               </p>
-            ))}
-          </div>
-        </div>
-      ))}
+              <p className="text-xs font-semibold text-gray-400">Câu mẫu:</p>
+              <div className="mt-1 space-y-1">
+                {step.samplePhrases.map((phrase, j) => (
+                  <p key={j} className="flex items-start gap-2 pl-2 text-sm text-white">
+                    <span className="mt-1" style={{ color: GOLD }}>›</span>
+                    {stripEmoji(phrase)}
+                  </p>
+                ))}
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
 
-      {/* Downsale Strategy */}
-      {mission.downsaleStrategy && (
-        <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4">
-          <h4 className="mb-2 text-sm font-bold" style={{ color: "#ffd700" }}>
-            ⚡ Chiến thuật Downsale (khi khách chưa sẵn sàng mua core):
-          </h4>
+      {/* Downsale */}
+      {mission.downsaleStrategy && mission.downsaleStrategy.length > 0 && (
+        <Section title="Chiến thuật Downsale" count={mission.downsaleStrategy.length}>
           <ul className="space-y-2">
             {mission.downsaleStrategy.map((s, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-foreground">
-                <span className="mt-0.5" style={{ color: "#ffd700" }}>→</span>
-                {s}
+              <li key={i} className="flex items-start gap-2 text-sm text-white">
+                <span className="mt-0.5" style={{ color: GOLD }}>›</span>
+                {stripEmoji(s)}
               </li>
             ))}
           </ul>
-        </div>
+        </Section>
       )}
 
       {/* Sale Tools */}
-      {mission.saleTools && (
-        <div className="overflow-x-auto rounded-xl border border-border">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border bg-muted/30">
-                <th className="px-4 py-3 text-left font-semibold text-foreground">Công cụ</th>
-                <th className="px-4 py-3 text-left font-semibold text-foreground">Mục đích</th>
-                <th className="px-4 py-3 text-left font-semibold text-foreground">Dùng ở</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mission.saleTools.map((tool, i) => (
-                <tr key={i} className="border-b border-border/50 last:border-0">
-                  <td className="px-4 py-3 font-medium text-purple-300">{tool.name}</td>
-                  <td className="px-4 py-3 text-foreground">{tool.purpose}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{tool.usedAt}</td>
+      {mission.saleTools && mission.saleTools.length > 0 && (
+        <Section title="Công cụ Sale" count={mission.saleTools.length}>
+          <div className="overflow-x-auto rounded-xl border" style={{ borderColor: GOLD_BORDER }}>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b" style={{ borderColor: GOLD_BORDER, backgroundColor: GOLD_SOFT }}>
+                  <th className="px-4 py-3 text-left font-semibold text-white">Công cụ</th>
+                  <th className="px-4 py-3 text-left font-semibold text-white">Mục đích</th>
+                  <th className="px-4 py-3 text-left font-semibold text-white">Dùng ở</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {mission.saleTools.map((tool, i) => (
+                  <tr key={i} className="border-b last:border-0" style={{ borderColor: "rgba(255,215,0,0.12)" }}>
+                    <td className="px-4 py-3 font-medium" style={{ color: GOLD }}>{stripEmoji(tool.name)}</td>
+                    <td className="px-4 py-3 text-white">{stripEmoji(tool.purpose)}</td>
+                    <td className="px-4 py-3 text-gray-300">{stripEmoji(tool.usedAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Section>
       )}
 
       {/* Customer Groups */}
-      {mission.customerGroups?.map((group, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-2 text-sm font-bold text-foreground">{group.name}</h4>
-          <div className="mb-3 space-y-1">
-            <p className="text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">🔍 Dấu hiệu:</span> {group.signs}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">📊 Trạng thái:</span> {group.status}
-            </p>
-          </div>
-          <div className="mb-3 space-y-2">
-            <p className="text-xs font-semibold text-purple-300">📋 Cách phản ứng:</p>
-            {group.steps.map((s, j) => (
-              <div key={j} className="rounded-lg bg-card p-3">
-                <p className="text-sm text-foreground">
-                  <span className="font-semibold text-purple-300">{s.step}:</span> {s.detail}
+      {mission.customerGroups && mission.customerGroups.length > 0 && (
+        <Section title="Nhóm khách hàng" count={mission.customerGroups.length}>
+          {mission.customerGroups.map((group, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <h4 className="mb-2 text-sm font-bold text-white">{stripEmoji(group.name)}</h4>
+              <div className="mb-3 space-y-1">
+                <p className="text-xs text-gray-300">
+                  <span className="font-semibold text-white">Dấu hiệu:</span> {stripEmoji(group.signs)}
+                </p>
+                <p className="text-xs text-gray-300">
+                  <span className="font-semibold text-white">Trạng thái:</span> {stripEmoji(group.status)}
                 </p>
               </div>
-            ))}
-          </div>
-          <div className="rounded-lg p-3" style={{ backgroundColor: "rgba(255, 215, 0, 0.08)" }}>
-            <p className="text-xs font-semibold" style={{ color: "#ffd700" }}>
-              ⚡ Quy tắc ghi nhớ 1 dòng:
-            </p>
-            <p className="mt-1 text-sm font-medium text-foreground">{group.quickRule}</p>
-          </div>
-        </div>
-      ))}
+              <p className="mb-2 text-xs font-semibold" style={{ color: GOLD }}>Cách phản ứng:</p>
+              <div className="space-y-2">
+                {group.steps.map((s, j) => (
+                  <div key={j} className="rounded-lg bg-black/30 p-3">
+                    <p className="text-sm text-white">
+                      <span className="font-semibold" style={{ color: GOLD }}>{stripEmoji(s.step)}:</span> {stripEmoji(s.detail)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 rounded-lg p-3" style={{ backgroundColor: GOLD_SOFT }}>
+                <p className="text-xs font-semibold" style={{ color: GOLD }}>Quy tắc ghi nhớ 1 dòng:</p>
+                <p className="mt-1 text-sm font-medium text-white">{stripEmoji(group.quickRule)}</p>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Case Studies */}
-      {mission.caseStudies?.map((cs, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-3 text-sm font-bold text-foreground">
-            Case {i + 1} — {cs.name}
-          </h4>
-          <div className="grid gap-2 sm:grid-cols-2">
-            <InfoRow label="🏁 Xuất phát điểm" value={cs.startingPoint} />
-            <InfoRow label="⚠️ Vấn đề" value={cs.problem} />
-            <InfoRow label="✅ Kết quả" value={cs.result} />
-            <InfoRow label="🎯 Dùng khi tư vấn cho" value={cs.useFor} />
-          </div>
-          <div className="mt-3 rounded-lg p-3" style={{ backgroundColor: "rgba(160, 32, 240, 0.08)" }}>
-            <p className="text-xs font-semibold text-purple-300">💬 Câu dẫn vào chuyện:</p>
-            <p className="mt-1 text-sm italic text-foreground">{cs.leadIn}</p>
-          </div>
-        </div>
-      ))}
+      {mission.caseStudies && mission.caseStudies.length > 0 && (
+        <Section title="Case Study tham chiếu" count={mission.caseStudies.length}>
+          {mission.caseStudies.map((cs, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <h4 className="mb-3 text-sm font-bold text-white">Case {i + 1} — {stripEmoji(cs.name)}</h4>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <InfoRow label="Xuất phát điểm" value={cs.startingPoint} />
+                <InfoRow label="Vấn đề" value={cs.problem} />
+                <InfoRow label="Kết quả" value={cs.result} />
+                <InfoRow label="Dùng khi tư vấn cho" value={cs.useFor} />
+              </div>
+              <div className="mt-3 rounded-lg p-3" style={{ backgroundColor: GOLD_SOFT }}>
+                <p className="text-xs font-semibold" style={{ color: GOLD }}>Câu dẫn vào chuyện:</p>
+                <p className="mt-1 text-sm italic text-white">{stripEmoji(cs.leadIn)}</p>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Case Quick Ref */}
-      {mission.caseQuickRef && (
-        <div className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-3 text-sm font-bold" style={{ color: "#ffd700" }}>
-            ⚡ Bảng tra nhanh — Dùng case nào cho ai:
-          </h4>
+      {mission.caseQuickRef && mission.caseQuickRef.length > 0 && (
+        <Section title="Bảng tra nhanh — dùng case nào cho ai" count={mission.caseQuickRef.length}>
           <div className="space-y-2">
             {mission.caseQuickRef.map((ref, i) => (
-              <div key={i} className="flex items-center justify-between gap-2 rounded-lg bg-card px-3 py-2">
-                <span className="text-sm text-foreground">{ref.customerType}</span>
-                <span className="shrink-0 text-sm font-semibold text-purple-300">→ {ref.caseName}</span>
+              <div key={i} className="flex items-center justify-between gap-2 rounded-lg bg-black/30 px-3 py-2">
+                <span className="text-sm text-white">{stripEmoji(ref.customerType)}</span>
+                <span className="shrink-0 text-sm font-semibold" style={{ color: GOLD }}>› {stripEmoji(ref.caseName)}</span>
               </div>
             ))}
           </div>
-        </div>
+        </Section>
       )}
 
       {/* Nurture Stages */}
-      {mission.nurtureStages?.map((stage, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-2 text-sm font-bold text-foreground">{stage.stage}</h4>
-          <div className="space-y-2">
-            <div className="rounded-lg p-3" style={{ backgroundColor: "rgba(160, 32, 240, 0.08)" }}>
-              <p className="text-xs font-semibold text-purple-300">📤 Gửi gì:</p>
-              <p className="mt-1 text-sm text-foreground">{stage.sendWhat}</p>
+      {mission.nurtureStages && mission.nurtureStages.length > 0 && (
+        <Section title="Chăm sóc khách (Nurture)" count={mission.nurtureStages.length}>
+          {mission.nurtureStages.map((stage, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <h4 className="mb-2 text-sm font-bold text-white">{stripEmoji(stage.stage)}</h4>
+              <div className="space-y-2">
+                <Block label="Gửi gì" gold>
+                  <p className="text-sm text-white">{stripEmoji(stage.sendWhat)}</p>
+                </Block>
+                <Block label="Mục đích">
+                  <p className="text-sm text-white">{stripEmoji(stage.purpose)}</p>
+                </Block>
+                {stage.extra && (
+                  <p className="text-xs text-gray-300">
+                    <span className="font-semibold text-white">Bổ sung sau:</span> {stripEmoji(stage.extra)}
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="rounded-lg bg-card p-3">
-              <p className="text-xs font-semibold text-muted-foreground">🎯 Mục đích:</p>
-              <p className="mt-1 text-sm text-foreground">{stage.purpose}</p>
-            </div>
-            {stage.extra && (
-              <p className="text-xs text-muted-foreground">
-                <span className="font-semibold">📝 Bổ sung sau:</span> {stage.extra}
-              </p>
-            )}
-          </div>
-        </div>
-      ))}
+          ))}
+        </Section>
+      )}
 
       {/* Nurture Rules */}
-      {mission.nurtureRules && (
-        <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4">
-          <h4 className="mb-3 text-sm font-bold" style={{ color: "#ffd700" }}>
-            📋 Quy tắc Nurture cho Sale:
-          </h4>
+      {mission.nurtureRules && mission.nurtureRules.length > 0 && (
+        <Section title="Quy tắc Nurture cho Sale" count={mission.nurtureRules.length}>
           <ul className="space-y-2">
             {mission.nurtureRules.map((rule, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-foreground">
-                <span className="mt-0.5 font-bold" style={{ color: "#ffd700" }}>{i + 1}.</span>
-                {rule}
+              <li key={i} className="flex items-start gap-2 text-sm text-white">
+                <span className="mt-0.5 font-bold" style={{ color: GOLD }}>{i + 1}.</span>
+                {stripEmoji(rule)}
               </li>
             ))}
           </ul>
-        </div>
+        </Section>
       )}
 
       {/* Daily Checklist */}
-      {mission.dailyChecklist?.map((block, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-3 text-sm font-bold text-foreground">{block.time}</h4>
-          <ul className="space-y-2">
-            {block.items.map((item, j) => (
-              <li key={j} className="flex items-start gap-2 text-sm text-foreground">
-                <span className="mt-0.5 text-purple-400">☐</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      {mission.dailyChecklist && mission.dailyChecklist.length > 0 && (
+        <Section title="Checklist công việc hằng ngày" count={mission.dailyChecklist.length}>
+          {mission.dailyChecklist.map((block, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <h4 className="mb-3 text-sm font-bold text-white">{stripEmoji(block.time)}</h4>
+              <ul className="space-y-2">
+                {block.items.map((item, j) => (
+                  <li key={j} className="flex items-start gap-2 text-sm text-white">
+                    <span
+                      className="mt-1 inline-block h-3 w-3 shrink-0 rounded border"
+                      style={{ borderColor: GOLD }}
+                    />
+                    {stripEmoji(item)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Product Tiers */}
-      {mission.productTiers?.map((tier, i) => (
-        <div key={i} className="rounded-xl border border-border bg-muted/20 p-4">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold"
-            style={{
-              backgroundColor: tier.tier === "FREE" ? "rgba(76, 175, 80, 0.15)" :
-                tier.tier === "ENTRY" ? "rgba(33, 150, 243, 0.15)" :
-                tier.tier === "CORE" ? "rgba(160, 32, 240, 0.15)" :
-                "rgba(255, 215, 0, 0.15)",
-              color: tier.tier === "FREE" ? "#4CAF50" :
-                tier.tier === "ENTRY" ? "#2196F3" :
-                tier.tier === "CORE" ? "#a020f0" :
-                "#ffd700",
-            }}
-          >
-            {tier.tier} — {tier.label}
-          </div>
-          <ul className="space-y-2">
-            {tier.items.map((item, j) => (
-              <li key={j} className="flex items-start gap-2 text-sm text-foreground">
-                <span className="mt-0.5 text-purple-400">•</span>
-                {item.link ? (
-                  <a href={item.link} target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "#bb86fc" }}>
-                    {item.name}
-                  </a>
-                ) : (
-                  item.name
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      {mission.productTiers && mission.productTiers.length > 0 && (
+        <Section title="Sản phẩm theo tầng" count={mission.productTiers.length}>
+          {mission.productTiers.map((tier, i) => (
+            <div key={i} className="rounded-xl border p-4" style={{ borderColor: GOLD_BORDER }}>
+              <div
+                className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold"
+                style={{ backgroundColor: GOLD_SOFT, color: GOLD }}
+              >
+                {stripEmoji(tier.tier)} — {stripEmoji(tier.label)}
+              </div>
+              <ul className="space-y-2">
+                {tier.items.map((item, j) => (
+                  <li key={j} className="flex items-start gap-2 text-sm text-white">
+                    <span className="mt-1" style={{ color: GOLD }}>›</span>
+                    {item.link ? (
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "#bb86fc" }}>
+                        {stripEmoji(item.name)}
+                      </a>
+                    ) : (
+                      stripEmoji(item.name)
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Community Links */}
-      {mission.communityLinks && (
-        <div className="rounded-xl border border-border bg-muted/20 p-4">
-          <h4 className="mb-3 text-sm font-bold text-foreground">🌐 Cộng đồng:</h4>
+      {mission.communityLinks && mission.communityLinks.length > 0 && (
+        <Section title="Cộng đồng" count={mission.communityLinks.length}>
           <div className="flex flex-wrap gap-2">
             {mission.communityLinks.map((link, i) => (
               <a
@@ -345,14 +368,14 @@ export function MissionContent({ mission }: MissionContentProps) {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-medium transition-colors hover:bg-purple-500/20"
-                style={{ color: "#bb86fc" }}
+                className="inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-yellow-500/10"
+                style={{ borderColor: GOLD_BORDER, color: GOLD }}
               >
-                {link.name} ↗
+                {stripEmoji(link.name)} ›
               </a>
             ))}
           </div>
-        </div>
+        </Section>
       )}
     </div>
   );
@@ -360,9 +383,20 @@ export function MissionContent({ mission }: MissionContentProps) {
 
 function InfoRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="rounded-lg bg-card p-3">
-      <p className="text-xs font-semibold text-muted-foreground">{label}</p>
-      <p className={`mt-1 text-sm font-medium ${highlight ? "text-purple-300" : "text-foreground"}`}>{value}</p>
+    <div className="rounded-lg bg-black/30 p-3">
+      <p className="text-xs font-semibold text-gray-400">{stripEmoji(label)}</p>
+      <p className="mt-1 text-sm font-medium" style={{ color: highlight ? GOLD : "#fff" }}>
+        {stripEmoji(value)}
+      </p>
+    </div>
+  );
+}
+
+function Block({ label, children, gold }: { label: string; children: React.ReactNode; gold?: boolean }) {
+  return (
+    <div className="rounded-lg p-3" style={{ backgroundColor: gold ? GOLD_SOFT : "rgba(255,255,255,0.03)" }}>
+      <p className="text-xs font-semibold" style={{ color: gold ? GOLD : "#9ca3af" }}>{stripEmoji(label)}:</p>
+      <div className="mt-1">{children}</div>
     </div>
   );
 }
