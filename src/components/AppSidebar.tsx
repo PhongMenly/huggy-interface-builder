@@ -19,7 +19,11 @@ export function AppSidebar() {
       external: true as const,
     },
     { label: "Vinh danh", to: "/honor" as const },
-    { label: "Hồ sơ", to: "/profile" as const },
+    {
+      label: "Huấn Luyện SKILL AI",
+      to: "https://whop.com/joined/kolaigoglobal/" as const,
+      external: true as const,
+    },
   ];
 
   const isActive = (path: string) => currentPath === path;
