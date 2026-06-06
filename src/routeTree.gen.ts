@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LinksRouteImport } from './routes/links'
 import { Route as HonorRouteImport } from './routes/honor'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +24,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LinksRoute = LinksRouteImport.update({
+  id: '/links',
+  path: '/links',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HonorRoute = HonorRouteImport.update({
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/honor': typeof HonorRoute
+  '/links': typeof LinksRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/honor': typeof HonorRoute
+  '/links': typeof LinksRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
 }
@@ -60,21 +68,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/honor': typeof HonorRoute
+  '/links': typeof LinksRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/calendar' | '/honor' | '/login' | '/profile'
+  fullPaths: '/' | '/calendar' | '/honor' | '/links' | '/login' | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/calendar' | '/honor' | '/login' | '/profile'
-  id: '__root__' | '/' | '/calendar' | '/honor' | '/login' | '/profile'
+  to: '/' | '/calendar' | '/honor' | '/links' | '/login' | '/profile'
+  id:
+    | '__root__'
+    | '/'
+    | '/calendar'
+    | '/honor'
+    | '/links'
+    | '/login'
+    | '/profile'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
   HonorRoute: typeof HonorRoute
+  LinksRoute: typeof LinksRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
 }
@@ -93,6 +110,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/links': {
+      id: '/links'
+      path: '/links'
+      fullPath: '/links'
+      preLoaderRoute: typeof LinksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/honor': {
@@ -123,6 +147,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
   HonorRoute: HonorRoute,
+  LinksRoute: LinksRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
 }

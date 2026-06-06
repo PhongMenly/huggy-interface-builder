@@ -24,6 +24,7 @@ export function AppSidebar() {
       to: "https://whop.com/joined/kolaigoglobal/" as const,
       external: true as const,
     },
+    { label: "Link Bán Hàng", to: "/links" as const },
   ];
 
   const isActive = (path: string) => currentPath === path;
