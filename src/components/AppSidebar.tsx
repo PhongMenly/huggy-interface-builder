@@ -15,7 +15,7 @@ export function AppSidebar() {
     { label: "Trang chủ", to: "/" as const },
     {
       label: "Lịch làm việc",
-      to: "https://docs.google.com/spreadsheets/d/1nemoQ8IkClykxAwmeB2H-1u-SpFzM1tGtcwFbo61iHU/edit?usp=sharing" as const,
+      to: "https://docs.google.com/spreadsheets/d/1ITgg_mOIVXHhZ6m6swwyRcDMI5tuBCJs6aWnmrLm3ok/edit?usp=sharing" as const,
       external: true as const,
     },
     { label: "Vinh danh", to: "/honor" as const },
