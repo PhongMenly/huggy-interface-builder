@@ -29,8 +29,14 @@ const SALES_LINKS = [
   {
     id: "ladipage",
     label: "Ladipage KOL AI SYSTEM",
-    url: "https://kolaisystemladipage.vercel.app/",
+    url: "https://kolaisystem.com/",
     description: "Trang landing chính thức của hệ thống",
+  },
+  {
+    id: "matmamlyai",
+    label: "Mật Mã Tự Do",
+    url: "https://www.phongmenlyai.com/",
+    description: "Cộng đồng Mật Mã Tự Do",
   },
   {
     id: "community",
