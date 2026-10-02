@@ -39,10 +39,22 @@ const SALES_LINKS = [
     description: "Cộng đồng Mật Mã Tự Do",
   },
   {
-    id: "community",
-    label: "Cộng đồng WHOP KOL AI GO GLOBAL",
-    url: "https://whop.com/joined/kolaigoglobal/",
-    description: "Cộng đồng trả phí trên Whop",
+    id: "matmamlyai-admin",
+    label: "Link quyền Admin Mật mã tự do",
+    url: "https://www.phongmenlyai.com/quan-ly",
+    description: "Trang quản trị dành cho Admin Mật Mã Tự Do",
+  },
+  {
+    id: "kola-training",
+    label: "KOL AI SYSTEM Huấn Luyện",
+    url: "https://kol-ai-system-gamma.vercel.app",
+    description: "Trang huấn luyện KOL AI SYSTEM",
+  },
+  {
+    id: "skill-market",
+    label: "Sàn Skill",
+    url: "https://theskill.vercel.app/",
+    description: "Sàn Skill — nền tảng kỹ năng",
   },
   {
     id: "training",
